@@ -9,6 +9,7 @@ class Chicken extends MoveableObject {
         'img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
     ];
 
+    chicken_sound = new Audio('audio/chicken.mp3')
     
     
 
@@ -23,6 +24,10 @@ class Chicken extends MoveableObject {
 
     animation() {
         this.moveLeft();
+        
+        setInterval( () => {
+            this.chicken_sound.play();
+        }, 2000);
 
         setInterval( () => {
             let i = this.currentImage % this.walk_animation_chicken.length;
