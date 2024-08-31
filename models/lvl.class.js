@@ -9,12 +9,12 @@ class Level {
         this.enemies = enemies;
         this.clouds = clouds;
         this.backgroundObjects = backgroundObjects;
-        this.playBackgroundMusic();
+        //this.playBackgroundMusic();
     }
 
-    playBackgroundMusic() {
+   /* playBackgroundMusic() {
         setInterval( () => {
             this.backgroundMusic.play();
         },);
-    }
+    } */
 }
