@@ -7,6 +7,8 @@ class World {
     keyboard;
     camera_x = 0;
 
+    hurt_sound = new Audio('audio/hurt.mp3');
+
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -20,17 +22,18 @@ class World {
     setWorld() {
         this.character.world = this;
     }
+    
 
     checkCollison() {
         setInterval(() => {
             this.lvl.enemies.forEach((enemie) => {
                 if (this.character.isColliding(enemie) && this.character.HP > 0) {
                     this.character.HP -= 1;
+                    this.hurt_sound.play();
                     console.log('HP = ', this.character.HP);
                 }
             });
         }, 1000);
-
     }
 
 

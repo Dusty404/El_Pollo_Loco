@@ -48,6 +48,15 @@ class MoveableObject {
     }
 
 
+    
+    characterDeathAnimation() {
+        if(this.isDead()) {
+            this.playAnimation(this.dead_animation);
+            
+        }
+    }
+
+
     isColliding(object) {
             return this.x + this.width > object.x &&
                 this.y + this.height > object.y &&
@@ -88,7 +97,7 @@ class MoveableObject {
     }
 
     playAnimation(images) {
-        let i = this.currentImage % this.walk_animation_Images.length;
+        let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
