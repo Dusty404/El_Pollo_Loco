@@ -24,8 +24,9 @@ class World {
     checkCollison() {
         setInterval(() => {
             this.lvl.enemies.forEach((enemie) => {
-                if (this.character.isColliding(enemie) ) {
-                    console.log('Collision with Character');
+                if (this.character.isColliding(enemie) && this.character.HP > 0) {
+                    this.character.HP -= 1;
+                    console.log('HP = ', this.character.HP);
                 }
             });
         }, 1000);

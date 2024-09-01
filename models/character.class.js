@@ -3,6 +3,8 @@ class Character extends MoveableObject {
   height = 250;
   width = 150;
   speed = 10;
+  HP = 5;
+
   walk_animation_Images = [
     "img/2_character_pepe/2_walk/W-21.png",
     "img/2_character_pepe/2_walk/W-22.png",
@@ -33,7 +35,16 @@ class Character extends MoveableObject {
     "img/2_character_pepe/3_jump/J-37.png",
     "img/2_character_pepe/3_jump/J-38.png",
     "img/2_character_pepe/3_jump/J-39.png",
-  ]
+  ];
+  dead_animation = [
+    'img/2_character_pepe/5_dead/D-51.png',
+    'img/2_character_pepe/5_dead/D-52.png',
+    'img/2_character_pepe/5_dead/D-53.png',
+    'img/2_character_pepe/5_dead/D-54.png',
+    'img/2_character_pepe/5_dead/D-55.png',
+    'img/2_character_pepe/5_dead/D-56.png',
+    'img/2_character_pepe/5_dead/D-57.png'
+  ];
   world;
 
   walking_sound = new Audio('audio/walking.mp3');
@@ -43,11 +54,12 @@ class Character extends MoveableObject {
     this.loadImages(this.walk_animation_Images);
     this.loadImages(this.idl_animation);
     this.loadImages(this.jump_nimation_Images);
+    this.loadImages(this.dead_animation);
     this.animation();
     this.applyGravity();
   }
 
-  
+
   animation() {
     setInterval(() => {
       this.world.camera_x = -this.x + 100;
@@ -74,6 +86,11 @@ class Character extends MoveableObject {
       if(!this.world.keyboard.LEFT && !this.world.keyboard.RIGHT) {
         this.playAnimation(this.idl_animation);
       }
+
+      if(this.isDead()) {
+        this.playAnimation(this.dead_animation);
+      }
+      
 
 
       if(this.isAboveGround()) {

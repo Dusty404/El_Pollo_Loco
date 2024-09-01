@@ -10,6 +10,7 @@ class MoveableObject {
     otherDirection = false;
     speedY = 0;
     accelration = 2;
+    HP = 1;
 
     applyGravity() {
         setInterval(() => {
@@ -39,6 +40,11 @@ class MoveableObject {
             ctx.rect(this.x, this.y, this.width, this.height);
             ctx.stroke();
         }
+    }
+
+
+    isDead() {
+        return this.HP === 0;
     }
 
 
