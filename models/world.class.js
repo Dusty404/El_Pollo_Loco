@@ -28,7 +28,7 @@ class World {
         setInterval(() => {
             this.lvl.enemies.forEach((enemie) => {
                 if (this.character.isColliding(enemie) && this.character.HP > 0) {
-                    this.character.HP -= 1;
+                    this.character.hit();
                     this.hurt_sound.play();
                     console.log('HP = ', this.character.HP);
                 }

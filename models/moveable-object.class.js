@@ -1,16 +1,11 @@
-class MoveableObject {
-    x = 120;
-    y = 275;
-    height = 150;
-    width = 100;
-    img;
-    imageCache = {};
-    currentImage = 0;
+class MoveableObject extends DrawableObject {
+    
     speed = 0.5;
     otherDirection = false;
     speedY = 0;
     accelration = 2;
     HP = 1;
+    lastHit = 0;
 
     applyGravity() {
         setInterval(() => {
@@ -27,11 +22,6 @@ class MoveableObject {
     };
 
 
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
-
-
     drawObjectFrame(ctx) {
         if (this instanceof Character || this instanceof Chicken || this instanceof Endboss) {
             ctx.beginPath();
@@ -44,7 +34,14 @@ class MoveableObject {
 
 
     isDead() {
-        return this.HP === 0;
+        return this.HP == 0;
+    }
+
+
+    isHurt() {
+        let timepassed = new Date().getTime() - this.lastHit;
+        timepassed = timepassed / 1000;
+        return timepassed < 1;
     }
 
 
@@ -52,7 +49,16 @@ class MoveableObject {
     characterDeathAnimation() {
         if(this.isDead()) {
             this.playAnimation(this.dead_animation);
-            
+        }
+    }
+
+
+    hit() {
+        this.HP -= 1;
+        if(this.HP < 0) {
+            this.HP = 0;
+        } else {
+            this.lastHit = new Date().getTime();
         }
     }
 
@@ -67,22 +73,6 @@ class MoveableObject {
                 (this.y + this.offsetY + this.height) >= obj.y &&
                 (this.y + this.offsetY) <= (obj.y + obj.height) && 
                 obj.onCollisionCourse; */ // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
-    }
-
-
-    loadImage(path) {
-        this.img = new Image();
-        this.img.src = path;
-    }
-
-
-    loadImages(arr) {
-        arr.forEach(path => {
-            let img = new Image();
-            img.src = path;
-            this.imageCache[path] = img;
-        });
-
     }
 
 

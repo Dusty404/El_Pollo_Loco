@@ -45,6 +45,11 @@ class Character extends MoveableObject {
     'img/2_character_pepe/5_dead/D-56.png',
     'img/2_character_pepe/5_dead/D-57.png'
   ];
+  hurt_Animation_Images = [
+    'img/2_character_pepe/4_hurt/H-41.png',
+    'img/2_character_pepe/4_hurt/H-42.png',
+    'img/2_character_pepe/4_hurt/H-43.png',
+  ];
   world;
 
   walking_sound = new Audio('audio/walking.mp3');
@@ -56,6 +61,7 @@ class Character extends MoveableObject {
     this.loadImages(this.idl_animation);
     this.loadImages(this.jump_nimation_Images);
     this.loadImages(this.dead_animation);
+    this.loadImages(this.hurt_Animation_Images);
     this.animation();
     this.applyGravity();
   }
@@ -65,51 +71,35 @@ class Character extends MoveableObject {
     setInterval(() => {
       this.world.camera_x = -this.x + 100;
 
-      
       if (this.world.keyboard.RIGHT && this.x < this.world.lvl.level_end_x) {
         this.moveRight();
       }
-
 
       if (this.world.keyboard.LEFT && this.x > 0) {
         this.moveLeft();
         this.otherDirection = true;
       }
 
-
-      if(this.world.keyboard.SPACE && !this.isAboveGround() && this.Hp > 0) {
+      if (this.world.keyboard.SPACE && !this.isAboveGround()) {
         this.jump();
       }
     }, 1000 / 60);
 
 
     setInterval(() => {
-      if(!this.world.keyboard.LEFT && !this.world.keyboard.RIGHT && this.HP > 0) {
-        this.playAnimation(this.idl_animation);
-      }
-    }, 200);
-
-
-    setInterval(() => {
-      if(this.isDead()) {
+      if (this.isDead()) {
         this.playAnimation(this.dead_animation);
-      }
-    }, 160);
-
-
-    setInterval(() => {
-      if(this.isAboveGround()) {
+      } else if (this.isHurt()) {
+        this.playAnimation(this.hurt_Animation_Images);
+      } else if (this.isAboveGround()) {
         this.playAnimation(this.jump_nimation_Images);
-      }
-    }, 200);
-
-
-
-    setInterval(() => {
-      if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+      } else if (!this.world.keyboard.LEFT && !this.world.keyboard.RIGHT && this.HP > 0) {
+        this.playAnimation(this.idl_animation);
+      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.playAnimation(this.walk_animation_Images);
         this.walking_sound.play();
-      } else {
+      }
+      if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
         this.walking_sound.pause();
       }
     }, 50);
