@@ -3,7 +3,7 @@ class Character extends MoveableObject {
   height = 250;
   width = 150;
   speed = 10;
-  HP = 5;
+  HP = 100;
 
   walk_animation_Images = [
     "img/2_character_pepe/2_walk/W-21.png",
@@ -71,16 +71,16 @@ class Character extends MoveableObject {
     setInterval(() => {
       this.world.camera_x = -this.x + 100;
 
-      if (this.world.keyboard.RIGHT && this.x < this.world.lvl.level_end_x) {
+      if (this.world.keyboard.RIGHT && this.x < this.world.lvl.level_end_x && this.HP > 0) {
         this.moveRight();
       }
 
-      if (this.world.keyboard.LEFT && this.x > 0) {
+      if (this.world.keyboard.LEFT && this.x > 0 && this.HP > 0) {
         this.moveLeft();
         this.otherDirection = true;
       }
 
-      if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+      if (this.world.keyboard.SPACE && !this.isAboveGround() && this.HP > 0) {
         this.jump();
       }
     }, 1000 / 60);

@@ -6,6 +6,9 @@ class World {
     canvas;
     keyboard;
     camera_x = 0;
+    statusbar = new Statusbar();
+    statusbarCoins = new Statusbar();
+    statusbarBottle = new Statusbar();
 
     hurt_sound = new Audio('audio/hurt.mp3');
 
@@ -29,6 +32,7 @@ class World {
             this.lvl.enemies.forEach((enemie) => {
                 if (this.character.isColliding(enemie) && this.character.HP > 0) {
                     this.character.hit();
+                    this.statusbar.setPercentage(this.character.HP);
                     this.hurt_sound.play();
                     console.log('HP = ', this.character.HP);
                 }
@@ -45,6 +49,11 @@ class World {
         this.addArrayObjectToMap(this.lvl.backgroundObjects);
         this.addArrayObjectToMap(this.lvl.clouds);
         this.addArrayObjectToMap(this.lvl.enemies);
+
+        this.ctx.translate(-this.camera_x, 0);
+        this.addToMap(this.statusbar);
+        this.ctx.translate(this.camera_x, 0);
+
         this.addToMap(this.character);
 
         this.ctx.translate(-this.camera_x, 0);
