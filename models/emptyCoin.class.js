@@ -1,0 +1,3 @@
+class Emptycoin extends Coin {
+    
+}

@@ -7,6 +7,7 @@ class MoveableObject extends DrawableObject {
     HP = 1;
     lastHit = 0;
 
+
     applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
@@ -62,10 +63,10 @@ class MoveableObject extends DrawableObject {
                 this.x < object.x &&
                 this.y < object.y + object.height
         
-        /* return  (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) && 
-                (this.y + this.offsetY + this.height) >= obj.y &&
-                (this.y + this.offsetY) <= (obj.y + obj.height) && 
-                obj.onCollisionCourse; */ // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
+        /* return  (this.x + this.width) >= object.x && this.x <= (object.x + object.width) && 
+                (this.y + this.offsetY + this.height) >= object.y &&
+                (this.y + this.offsetY) <= (object.y + object.height) && 
+                object.onCollisionCourse; */ // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
     }
 
 
@@ -77,13 +78,6 @@ class MoveableObject extends DrawableObject {
 
     moveLeft() {
         this.x -= this.speed;
-    }
-
-    playAnimation(images) {
-        let i = this.currentImage % images.length;
-        let path = images[i];
-        this.img = this.imageCache[path];
-        this.currentImage++;
     }
 
 

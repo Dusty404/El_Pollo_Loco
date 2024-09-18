@@ -10,10 +10,12 @@ class StatusbarCoin extends Statusbar {
         'img/7_statusbars/1_statusbar/1_statusbar_coin/green/100.png'
     ];
 
+    coins = 0;
+
 
     constructor() {
         super();
-        this.percentage = 0;
+        this.percentage = 0
         this.loadImages(this.images_Coin);
         this.width = 200;
         this.height = 60;

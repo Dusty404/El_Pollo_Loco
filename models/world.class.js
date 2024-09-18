@@ -10,6 +10,8 @@ class World {
     statusbarCoins = new StatusbarCoin();
     statusbarBottle = new StatusbarBottle();
     throwableObject = [];
+    emptyCoin = new Emptycoin();
+
 
     hurt_sound = new Audio('audio/hurt.mp3');
 
@@ -37,20 +39,76 @@ class World {
 
 
     checkCollison() {
+        this.checkCollisonEnemie();
+        this.checkCollisonCoin();
+        this.checkCollisonBottle();
+    }
+
+
+    checkCollisonEnemie() {
         this.lvl.enemies.forEach((enemie) => {
             if (this.character.isColliding(enemie) && this.character.HP > 0) {
                 this.character.hit();
                 this.statusbar.setPercentage(this.character.HP);
                 this.hurt_sound.play();
-                console.log('HP = ', this.character.HP);
             }
+        });  
+    }
+
+
+    checkCollisonEnemieAndBottle() {
+        this.lvl.enemies.forEach((enemie, index) => {
+            const enemieToRemove = [];
+            if (this.throwableObject.isColliding(enemie)) {
+                enemieToRemove.push(index);
+            }
+        });  
+
+        enemiesToRemove.reverse().forEach(index => {
+            this.lvl.enemies.splice(index, 1);
         });
     }
 
+
+    checkCollisonCoin() {
+        const coinsToRemove = [];
+        this.lvl.coins.forEach((coin, index) => {
+            if (this.character.isColliding(coin) && this.statusbarCoins.coins < 5) {
+                this.statusbarCoins.coins++;
+                this.statusbarCoins.setPercentage(this.statusbarCoins.coins * 20);                
+                coinsToRemove.push(index);
+            }
+        });
+    
+        coinsToRemove.reverse().forEach(index => {
+            this.lvl.coins.splice(index, 1);
+        });
+    }
+
+
+    checkCollisonBottle() {
+        const bottlesToRemove = [];
+        this.lvl.bottles.forEach((bottle, index) => {
+            if (this.character.isColliding(bottle) && this.statusbarBottle.bottle_count < 5) {
+                this.statusbarBottle.bottle_count++
+                this.statusbarBottle.setPercentage(this.statusbarBottle.bottle_count * 20);
+                bottlesToRemove.push(index);
+            }
+        });
+
+
+        bottlesToRemove.reverse().forEach(index => {
+            this.lvl.bottles.splice(index, 1);
+        });
+    }
+
+
     checkThrowObjects() {
-        if(this.keyboard.D) {
+        if(this.keyboard.D && this.statusbarBottle.bottle_count > 0) {
             let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 100)
             this.throwableObject.push(bottle);
+            this.statusbarBottle.bottle_count--
+            this.statusbarBottle.setPercentage(this.statusbarBottle.bottle_count * 20);
         }
     }
 
@@ -63,6 +121,8 @@ class World {
         this.addArrayObjectToMap(this.lvl.backgroundObjects);
         this.addArrayObjectToMap(this.lvl.clouds);
         this.addArrayObjectToMap(this.lvl.enemies);
+        this.addArrayObjectToMap(this.lvl.coins);
+        this.addArrayObjectToMap(this.lvl.bottles);
 
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusbar);

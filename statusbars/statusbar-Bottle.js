@@ -10,6 +10,8 @@ class StatusbarBottle extends Statusbar {
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png',
     ];
 
+    bottle_count = 0;
+
 
     constructor() {
         super();
