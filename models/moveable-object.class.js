@@ -7,6 +7,13 @@ class MoveableObject extends DrawableObject {
     HP = 1;
     lastHit = 0;
 
+    offset = {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0
+    };
+
 
     applyGravity() {
         setInterval(() => {
@@ -58,12 +65,12 @@ class MoveableObject extends DrawableObject {
 
 
     isColliding(object) {
-            return this.x + this.width > object.x &&
-                this.y + this.height > object.y &&
-                this.x < object.x &&
-                this.y < object.y + object.height
+            return  (this.x + this.width - this.offset.right) > (object.x + object.offset.left) && 
+                    (this.y + this.height - this.offset.bottom) > (object.y + object.offset.top) &&
+                    (this.x + this.offset.left) < (object.x + object.width - object.offset.right) &&
+                    (this.y + this.offset.top) < (object.y + object.height - object.offset.bottom);
         
-        /* return  (this.x + this.width) >= object.x && this.x <= (object.x + object.width) && 
+        /* return (this.x + this.width) >= object.x && this.x <= (object.x + object.width) && 
                 (this.y + this.offsetY + this.height) >= object.y &&
                 (this.y + this.offsetY) <= (object.y + object.height) && 
                 object.onCollisionCourse; */ // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.

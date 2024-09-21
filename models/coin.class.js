@@ -1,5 +1,11 @@
 class Coin extends CollectableObject {
 
+    offset = {
+        top: 50,
+        bottom: 100,
+        left: 50,
+        right: 100
+      };
 
     coinImages = [
         'img/8_coin/coin_1.png',

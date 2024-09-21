@@ -1,0 +1,38 @@
+/*
+boss {
+    hurt animation für boss
+    first meet function
+    lauf function
+    tempo erhöhen bei 1 hp
+}
+
+pepe {
+    pepe animationen fixen
+    flaschen in andere richtugn werfen
+}
+
+
+hünchen {
+    kleine hünchen erstellen
+    hünchen spring funktion
+    collision kill funktion
+}
+
+
+welt {
+    vergörßern
+    mehr gegner
+    mehr alles
+}
+
+Ui {
+    start game
+    win game
+    game over
+    hintergund
+    optionen für saound etc
+    handy optimirung
+    handy steuerung
+}
+
+*/

@@ -10,7 +10,6 @@ class World {
     statusbarCoins = new StatusbarCoin();
     statusbarBottle = new StatusbarBottle();
     throwableObject = [];
-    emptyCoin = new Emptycoin();
 
 
     hurt_sound = new Audio('audio/hurt.mp3');
@@ -32,14 +31,16 @@ class World {
 
     run() {
         setInterval(() => {
-            this.checkCollison();
+            this.checkCollisonEnemie();
             this.checkThrowObjects();
-        }, 200);
+        }, 600);
+        setInterval(() => {
+            this.checkCollison();
+        }, 10);
     }
 
 
     checkCollison() {
-        this.checkCollisonEnemie();
         this.checkCollisonCoin();
         this.checkCollisonBottle();
     }
@@ -47,27 +48,59 @@ class World {
 
     checkCollisonEnemie() {
         this.lvl.enemies.forEach((enemie) => {
-            if (this.character.isColliding(enemie) && this.character.HP > 0) {
+            if (this.character.isColliding(enemie) && this.character.HP > 0 && enemie instanceof Endboss) {
+                enemie.attack = true;
+            } else if (this.character.isColliding(enemie) && this.character.HP > 0) {
                 this.character.hit();
                 this.statusbar.setPercentage(this.character.HP);
                 this.hurt_sound.play();
+
             }
-        });  
+        });
     }
 
 
     checkCollisonEnemieAndBottle() {
-        this.lvl.enemies.forEach((enemie, index) => {
-            const enemieToRemove = [];
-            if (this.throwableObject.isColliding(enemie)) {
-                enemieToRemove.push(index);
-            }
-        });  
+        const enemiesToRemove = [];
 
-        enemiesToRemove.reverse().forEach(index => {
-            this.lvl.enemies.splice(index, 1);
+        this.lvl.enemies.forEach((enemie) => {
+            for (let i = 0; i < this.throwableObject.length; i++) {
+                const bottle = this.throwableObject[i];
+                if (bottle.hit) continue;
+                if (bottle.isColliding(enemie)) {
+                    bottle.hit = true;
+                    if (enemie.HP > 0) {
+                        enemie.HP--;
+                    }
+                    setTimeout(() => {
+                        this.throwableObject.splice(i, 1);
+                    }, 100);
+
+                    if (enemie.HP === 0 && !enemiesToRemove.includes(enemie)) {
+                        enemiesToRemove.push(enemie);
+                        clearInterval(enemie.walk);
+                        clearInterval(enemie.walkanimation);
+                    }
+                }
+            }
+        });
+
+        enemiesToRemove.forEach(enemie => {
+            const delay = enemie instanceof Endboss ? 3000 : 1000;
+
+            setTimeout(() => {
+                const index = this.lvl.enemies.indexOf(enemie);
+                if (index > -1) {
+                    this.lvl.enemies.splice(index, 1);
+                    console.log('Gegner entfernt:', enemie);
+                }
+            }, delay);
         });
     }
+
+
+
+
 
 
     checkCollisonCoin() {
@@ -75,11 +108,11 @@ class World {
         this.lvl.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin) && this.statusbarCoins.coins < 5) {
                 this.statusbarCoins.coins++;
-                this.statusbarCoins.setPercentage(this.statusbarCoins.coins * 20);                
+                this.statusbarCoins.setPercentage(this.statusbarCoins.coins * 20);
                 coinsToRemove.push(index);
             }
         });
-    
+
         coinsToRemove.reverse().forEach(index => {
             this.lvl.coins.splice(index, 1);
         });
@@ -104,12 +137,17 @@ class World {
 
 
     checkThrowObjects() {
-        if(this.keyboard.D && this.statusbarBottle.bottle_count > 0) {
+        if (this.keyboard.D && this.statusbarBottle.bottle_count > 0) {
             let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 100)
             this.throwableObject.push(bottle);
             this.statusbarBottle.bottle_count--
             this.statusbarBottle.setPercentage(this.statusbarBottle.bottle_count * 20);
+
+            setInterval(() => {
+                this.checkCollisonEnemieAndBottle();
+            }, 10);
         }
+
     }
 
 
