@@ -9,7 +9,9 @@ class World {
     statusbar = new StatusbarHP();
     statusbarCoins = new StatusbarCoin();
     statusbarBottle = new StatusbarBottle();
+    statusbarBossHP = new StatusbarBossHP();
     throwableObject = [];
+    meet = false;
 
 
     hurt_sound = new Audio('audio/hurt.mp3');
@@ -36,7 +38,22 @@ class World {
         }, 600);
         setInterval(() => {
             this.checkCollison();
+            this.firstmeet();
+            console.log(this.character.x)
         }, 10);
+    }
+
+
+    firstmeet() {
+        if (this.character.x === 1800 && !this.meet) {
+            this.lvl.enemies.forEach((enemie) => {
+                if (enemie instanceof Endboss) {
+                    enemie.meet = true;
+                    this.meet = true;
+                    console.log(this.meet, enemie.meet)
+                }
+            });
+        }
     }
 
 
@@ -50,6 +67,9 @@ class World {
         this.lvl.enemies.forEach((enemie) => {
             if (this.character.isColliding(enemie) && this.character.HP > 0 && enemie instanceof Endboss) {
                 enemie.attack = true;
+                this.character.hit();
+                this.statusbar.setPercentage(this.character.HP);
+                this.hurt_sound.play();
             } else if (this.character.isColliding(enemie) && this.character.HP > 0) {
                 this.character.hit();
                 this.statusbar.setPercentage(this.character.HP);
@@ -67,9 +87,30 @@ class World {
             for (let i = 0; i < this.throwableObject.length; i++) {
                 const bottle = this.throwableObject[i];
                 if (bottle.hit) continue;
-                if (bottle.isColliding(enemie)) {
+                if (bottle.isColliding(enemie) && enemie instanceof Endboss) {
                     bottle.hit = true;
-                    if (enemie.HP > 0) {
+                    if (enemie.HP > 0 && !enemie.gotHit) {
+                        enemie.gotHit = true;
+                        console.log(enemie.gotHit)
+                        enemie.HP--;
+                        this.statusbarBossHP.setPercentage(enemie.HP * 20);
+                    }
+                    setTimeout(() => {
+                        this.throwableObject.splice(i, 1);
+                    }, 100);
+
+                    if (enemie.HP === 0 && !enemiesToRemove.includes(enemie)) {
+                        enemiesToRemove.push(enemie);
+                        clearInterval(enemie.walk);
+                        clearInterval(enemie.walkanimation);
+                    }
+                } else if (bottle.isColliding(enemie)) {
+                    bottle.hit = true;
+                    if (enemie.HP > 0 && !enemie.gotHit) {
+                        enemie.gotHit = true;
+                        console.log(enemie.gotHit)
+                        enemie.HP--;
+                    } else if (enemie.HP > 0) {
                         enemie.HP--;
                     }
                     setTimeout(() => {
@@ -167,6 +208,7 @@ class World {
         this.addToMap(this.statusbarCoins);
         this.addToMap(this.statusbarBottle);
         this.addToMap(this.statusbarBottle);
+        this.addToMap(this.statusbarBossHP);
         this.ctx.translate(this.camera_x, 0);
 
         this.addToMap(this.character);

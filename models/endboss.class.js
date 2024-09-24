@@ -3,15 +3,21 @@ class Endboss extends MoveableObject {
     y = 30;
     height = 430;
     width = 250;
-    HP = 3;
+    HP = 5;
     BossIsDead = false;
     walk;
     bossDeath;
     Deathcheckint;
+    checkFirstMeetInt;
     hurt;
     hitregInterval;
     attack = false;
     attackCooldown = false;
+    walkSpeed;
+    gotHit = false;
+    attackInt;
+    meet = false;
+    speedFactor = 2;
 
 
     offset = {
@@ -82,48 +88,37 @@ class Endboss extends MoveableObject {
         this.loadImages(this.alert_animation_Images);
         this.loadImages(this.hurt_animation_Images);
         this.x = 2000;
-        this.animate();
         this.checkdeath();
-        this.HP = 3;
+        this.HP = 5;
         this.attack = false;
+        this.checkFirstMeet();
     }
+
 
     animate() {
         this.bossWalk();
-        if (this.HP === 3) {
+        if (this.HP > 0) {
+            this.walkSpeed = setInterval(() => {
+                this.x -= this.speedFactor;
+            }, 25);
             this.hitregInterval = setInterval(() => {
-                this.bossHP2();
+                this.bossHP();
             }, 10);
-        } else if (this.HP === 2) {
-            this.hitregInterval = setInterval(() => {
-                this.bossHP1();
+            this.checkAttack = setInterval(() => {
+                this.attackCheck();
             }, 10);
-        };
-        this.checkAttack = setInterval(() => {
-            this.attackCheck();
-        }, 10);
-    }
-
-    bossHP2() {
-        if (this.HP === 2) {
-            clearInterval(this.hitregInterval);
-            clearInterval(this.walk);
-            this.bossHurt();
-            setTimeout(() => {
-                clearInterval(this.hurt);
-                this.bossWalk();
-            }, 2000);
         }
     }
 
-    bossHP1() {
-        if (this.HP === 1) {
+    bossHP() {
+        if (this.gotHit === true) {
             clearInterval(this.hitregInterval);
             clearInterval(this.walk);
             this.bossHurt();
             setTimeout(() => {
                 clearInterval(this.hurt);
                 this.bossWalk();
+                this.animate();
             }, 2000);
         }
     }
@@ -131,6 +126,7 @@ class Endboss extends MoveableObject {
     checkdeath() {
         this.Deathcheckint = setInterval(() => {
             if (this.HP === 0) {
+                clearInterval(this.walkSpeed);
                 this.BossIsDead = true;
                 this.deathAnimation();
                 clearInterval(this.Deathcheckint);
@@ -145,11 +141,11 @@ class Endboss extends MoveableObject {
             clearInterval(this.hurt);
             clearInterval(this.attackInt);
             clearInterval(this.bossDeath);
-    
+
             this.bossDeath = setInterval(() => {
                 this.playAnimation(this.hurt_animation_Images);
             }, 100);
-    
+
             setTimeout(() => {
                 clearInterval(this.bossDeath);
                 this.bossDeath = setInterval(() => {
@@ -162,41 +158,45 @@ class Endboss extends MoveableObject {
 
 
     bossAttack() {
-        if (this.HP >0) {
-        clearInterval(this.walk);  // Vorherige Animation stoppen
-        clearInterval(this.hurt);
-        clearInterval(this.bossDeath);
-    
-        let attackInt = setInterval(() => {
-            this.playAnimation(this.attack_animation_Images);
-        }, 200);
-    
-        setTimeout(() => {
-            clearInterval(attackInt);
-            this.attack = false;
-            this.bossWalk();  // Zurück zur Laufanimation, nachdem der Angriff abgeschlossen ist
-        }, 2000);
+        if (this.HP > 0) {
+            clearInterval(this.walk);
+            clearInterval(this.hurt);
+            clearInterval(this.bossDeath);
+
+            this.attackInt = setInterval(() => {
+                this.playAnimation(this.attack_animation_Images);
+            }, 200);
+
+            setTimeout(() => {
+                clearInterval(this.attackInt);
+                this.attack = false;
+                this.bossWalk();
+            }, 2000);
         }
     }
 
     bossWalk() {
-        if (this.HP >0) {
-        clearInterval(this.walk);  // Vorheriges Intervall beenden, um Überlagerungen zu verhindern
-    
-        this.walk = setInterval(() => {
-            this.playAnimation(this.walk_animation_Images);
-        }, 250);
-    }
+        if (this.HP > 0) {
+            clearInterval(this.walk);
+            this.walk = setInterval(() => {
+                this.playAnimation(this.walk_animation_Images);
+            }, 250);
+        }
     }
 
     bossHurt() {
-        if (this.HP >0) {
-        clearInterval(this.hurt);
-    
-        this.hurt = setInterval(() => {
-            this.playAnimation(this.hurt_animation_Images);
-        }, 100);
-    }
+        if (this.HP > 0) {
+            clearInterval(this.walkSpeed);
+            clearInterval(this.hurt);
+            this.speedFactor++
+            this.hurt = setInterval(() => {
+                this.playAnimation(this.hurt_animation_Images);
+            }, 100);
+            setTimeout(() => {
+                this.gotHit = false;
+                console.log(this.gotHit);
+            }, 2000);
+        }
     }
 
 
@@ -210,6 +210,15 @@ class Endboss extends MoveableObject {
                 this.attackCooldown = false;
             }, 2000);
         }
+    }
+
+    checkFirstMeet() {
+        this.checkFirstMeetInt = setInterval(() => {
+            if (this.meet) {
+                clearInterval(this.checkFirstMeetInt);
+                this.animate();
+            }
+        }, 10);
     }
 
 }
