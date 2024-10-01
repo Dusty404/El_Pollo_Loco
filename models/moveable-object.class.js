@@ -26,7 +26,7 @@ class MoveableObject extends DrawableObject {
 
 
     isAboveGround() {
-        if (this instanceof ThrowableObject) {
+        if (this instanceof ThrowableObject || world.character.HP == 0) {
             return true;
         } else {
             return this.y < 180;
@@ -65,15 +65,29 @@ class MoveableObject extends DrawableObject {
 
 
     isColliding(object) {
-            return  (this.x + this.width - this.offset.right) > (object.x + object.offset.left) && 
-                    (this.y + this.height - this.offset.bottom) > (object.y + object.offset.top) &&
-                    (this.x + this.offset.left) < (object.x + object.width - object.offset.right) &&
-                    (this.y + this.offset.top) < (object.y + object.height - object.offset.bottom);
-        
-        /* return (this.x + this.width) >= object.x && this.x <= (object.x + object.width) && 
-                (this.y + this.offsetY + this.height) >= object.y &&
-                (this.y + this.offsetY) <= (object.y + object.height) && 
-                object.onCollisionCourse; */ // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
+        const objectTop = object.y + object.offset.top;
+        const objectBottom = object.y + object.height - object.offset.bottom;
+        const playerBottom = this.y + this.height - this.offset.bottom;
+        const playerTop = this.y + this.offset.top;
+    
+        return (this.x + this.width - this.offset.right) > (object.x + object.offset.left) && 
+               playerBottom > objectTop && // Spieler ist unter der Oberkante des Objekts
+               (this.x + this.offset.left) < (object.x + object.width - object.offset.right) &&
+               (playerTop < objectBottom); // Spieler muss unter der Unterkante des Objekts sein
+    }
+
+
+    isCollidingTop(object) {
+        // Die Y-Koordinate der Oberkante des anderen Objekts
+    const objectTop = object.y + object.offset.top;
+
+    // Die Y-Koordinate der Unterkante des Spielerbildes
+    const playerBottom = this.y + this.height - this.offset.bottom;
+
+    return (this.x + this.width - this.offset.right) > (object.x + object.offset.left) && 
+           playerBottom > objectTop && // Unterkante des Spielers ist unter der Oberkante des Objekts
+           (this.x + this.offset.left) < (object.x + object.width - object.offset.right) &&
+           playerBottom <= objectTop + 10; // Optionaler Schwellenwert für eine bessere Kollision
     }
 
 

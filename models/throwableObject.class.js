@@ -51,6 +51,11 @@ class ThrowableObject extends MoveableObject {
         this.speedY = 30;
         this.applyGravity();
         this.spinSpeed;
+        if(world.character.otherDirection == true) {
+            this.spinSpeed = setInterval(() => {
+                this.x -= 16
+            }, 25); 
+        }
         this.bottleanimation();
     }
 

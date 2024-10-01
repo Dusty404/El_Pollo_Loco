@@ -18,6 +18,9 @@ class Endboss extends MoveableObject {
     attackInt;
     meet = false;
     speedFactor = 2;
+    firstMeetAnimationInt;
+    bossalerte;
+    bossAnimationStart = false;
 
 
     offset = {
@@ -87,7 +90,7 @@ class Endboss extends MoveableObject {
         this.loadImages(this.dead_animation_Images);
         this.loadImages(this.alert_animation_Images);
         this.loadImages(this.hurt_animation_Images);
-        this.x = 2000;
+        this.x = 5400;
         this.checkdeath();
         this.HP = 5;
         this.attack = false;
@@ -216,9 +219,38 @@ class Endboss extends MoveableObject {
         this.checkFirstMeetInt = setInterval(() => {
             if (this.meet) {
                 clearInterval(this.checkFirstMeetInt);
-                this.animate();
+                this.firstMeetAnimation();
             }
         }, 10);
+    }
+
+    firstMeetAnimation() {
+        this.bossWalk();
+        this.firstMeetAnimationInt = setInterval(() => {
+            if(this.x > 5100 && this.bossAnimationStart === false) {
+                this.speedFactor = 1;
+                this.x -= this.speedFactor;
+            } else {
+                this.speedFactor = 0;
+                clearInterval(this.walk);
+                this.bossAnimationStart = true;
+                clearInterval(this.firstMeetAnimationInt);
+                this.bossAlert();
+                setTimeout(() => {
+                    clearInterval(this.bossalerte);
+                    this.speedFactor = 2;
+                    this.animate();
+                }, 3000);  
+            }
+        }, 10);
+    }
+
+
+    bossAlert() {
+        this.loadImage(this.alert_animation_Images[0]);
+        this.bossalerte = setInterval(() => {
+            this.playAnimation(this.alert_animation_Images);
+        }, 600);
     }
 
 }
