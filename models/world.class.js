@@ -79,7 +79,7 @@ class World {
         this.character.hit();
         this.statusbar.setPercentage(this.character.HP);
         this.hurt_sound.play();
-      } else if (this.character.isColliding(enemie) && this.character.HP > 0) {
+      } else if (this.character.isColliding(enemie) && this.character.HP > 0 && enemie.HP > 0) {
         this.character.hit();
         this.statusbar.setPercentage(this.character.HP);
         this.hurt_sound.play();
@@ -87,13 +87,6 @@ class World {
     });
   }
 
-  checkCollisionTop() {
-    this.lvl.enemies.forEach((enemie) => {
-      if (this.character.isCollidingTop(enemie) && this.character.HP > 0) {
-        enemie.HP--;
-      }
-    });
-  }
 
   checkCollisionTop() {
     const enemiesToRemove = [];
@@ -101,9 +94,10 @@ class World {
     this.lvl.enemies.forEach((enemie) => {
       if (this.character.isCollidingTop(enemie) && this.character.HP > 0 && this.character.speedY < 0) {
         enemie.HP--;
+        this.character.speedY = 20;
       }
 
-      if (enemie.HP === 0 && !enemiesToRemove.includes(enemie)) {
+      if ((enemie instanceof Chicken || enemie instanceof ChickenSmall) && enemie.HP === 0 && !enemiesToRemove.includes(enemie)) {
         enemiesToRemove.push(enemie);
         clearInterval(enemie.walk);
         clearInterval(enemie.walkanimation);
@@ -115,7 +109,6 @@ class World {
         const index = this.lvl.enemies.indexOf(enemie);
         if (index > -1) {
           this.lvl.enemies.splice(index, 1);
-          console.log("Gegner entfernt:", enemie);
         }
       }, 100);
     });
@@ -130,7 +123,7 @@ class World {
         if (bottle.hit) continue;
         if (bottle.isColliding(enemie) && enemie instanceof Endboss) {
           bottle.hit = true;
-          if (enemie.HP > 0 && !enemie.gotHit) {
+          if (enemie.HP > 0 && !enemie.gotHit && enemie.x < 5000) {
             enemie.gotHit = true;
             console.log(enemie.gotHit);
             enemie.HP--;
@@ -274,7 +267,7 @@ class World {
     }
 
     object.draw(this.ctx);
-    object.drawObjectFrame(this.ctx);
+    //object.drawObjectFrame(this.ctx);
 
     if (object.otherDirection) {
       this.flipImageBack(object);

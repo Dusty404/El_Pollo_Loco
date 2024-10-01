@@ -31,13 +31,12 @@ class Chicken extends MoveableObject {
     
     
 
-    constructor() {
+    constructor(x) {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.HP = 1;
-        this.x = 500 + 100 + Math.random() * 500;
+        this.x = 400 + Math.random() * 4800
         this.loadImages(this.walk_animation_Images);
         this.loadImages(this.chicken_dead);
-        
         this.animation();
         this.checkdeath();
     }

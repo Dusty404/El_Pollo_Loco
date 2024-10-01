@@ -8,10 +8,10 @@ class ChickenSmall extends MoveableObject {
     walkanimation;
 
     offset = {
-        top: 5,
-        bottom: 10,
-        left: 10,
-        right: 20
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0
     };
 
     walk = setInterval(() => {
@@ -35,10 +35,9 @@ class ChickenSmall extends MoveableObject {
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.HP = 1;
-        this.x = 500 + 100 + Math.random() * 500;
+        this.x = 400 + Math.random() * 4800
         this.loadImages(this.walk_animation_Images);
         this.loadImages(this.chicken_dead);
-        
         this.animation();
         this.checkdeath();
     }

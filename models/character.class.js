@@ -93,6 +93,13 @@ class Character extends MoveableObject {
     this.loadImages(this.lazy_animation_Images);
     this.animation();
     this.applyGravity();
+    //this.testint();
+  }
+
+  testint() {
+    setInterval(() => {
+      console.log(this.speedY)
+    }, 10);
   }
 
   animation() {
@@ -145,6 +152,7 @@ class Character extends MoveableObject {
       if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
         this.walking_sound.pause();
       }
+      console.log(this.speedY)
     }, 50);
   }
 

@@ -35,7 +35,7 @@ class DrawableObject {
 
     }
 
-    drawObjectFrame(ctx) {
+    /*drawObjectFrame(ctx) {
         if (this instanceof Character || this instanceof Chicken || this instanceof ChickenSmall || this instanceof Endboss || this instanceof ThrowableObject || this instanceof Bottle || this instanceof Coin) {
             ctx.beginPath();
             ctx.lineWidth = '5';
@@ -50,7 +50,7 @@ class DrawableObject {
             ctx.rect(this.x + this.offset.left, this.y + this.offset.top, this.width - this.offset.right, this.height - this.offset.bottom);
             ctx.stroke();
         }
-    }
+    }*/
 
 
     playAnimation(images) {
