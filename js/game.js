@@ -6,6 +6,8 @@ let keyboard = new Keyboard();
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
+    mobileControlls();
+    showgame();
 }
 
 
@@ -60,4 +62,55 @@ window.addEventListener('keyup', (e) => {
     if (e['keyCode'] === 68) {
         keyboard.D = false;
     }
-})
+});
+
+
+function mobileControlls() {
+    document.getElementById('mobileRunLeft').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.LEFT = true;
+    });
+
+    document.getElementById('mobileRunLeft').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.LEFT = false;
+    });
+
+    document.getElementById('mobileRunRigth').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.RIGHT = true;
+    });
+
+    document.getElementById('mobileRunRigth').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.RIGHT = false;
+    });
+
+    document.getElementById('mobileJump').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.SPACE = true;
+    });
+
+    document.getElementById('mobileJump').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.SPACE = false;
+    });
+
+    document.getElementById('mobileThrowBottle').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.D = true;
+    });
+
+    document.getElementById('mobileThrowBottle').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.D = false;
+    });
+}
+
+
+function showgame() {
+    let overlay = document.getElementById('menuOverlay');
+    let startButton = document.getElementById('startGame');
+    overlay.classList.remove('backgroundImage');
+    startButton.classList.add('d-none');
+}
