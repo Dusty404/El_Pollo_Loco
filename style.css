@@ -1,3 +1,8 @@
+.d-none {
+    display: none;
+}
+
+
 body {
     display: flex;
     align-items: center;
@@ -7,4 +12,108 @@ body {
 
 canvas {
     background-color: black;
+}
+
+
+.menuOverlay {
+    width: 720px;
+    height: 480px;
+    position: relative;
+    top: -481px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.backgroundImage {
+    background-image: url('img/9_intro_outro_screens/start/startscreen_2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+.optionButtonsRow {
+    display: flex;
+    align-self: end;
+    gap: 10px;
+    padding: 10px 10px 0 0;
+}
+
+
+.optionButton {
+    display: block;
+    width: 40px;
+    height: 40px;
+    background-color: aquamarine;
+    border: 1px solid gray;
+}
+
+
+.startGameButton {
+    background-color: coral;
+    width: 120px;
+    height: 50px;
+    align-self: center;
+    position: relative;
+    top: 65px;
+}
+
+
+.mobileControlles {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.mobileControlleButton {
+    display: block;
+    height: 100px;
+    width: 100px;
+    background-color: #FF9B00;
+    border-radius: 50px;
+    margin: 10px;
+}
+
+
+.throwBottleButton {
+    height: 75px;
+    width: 75px;
+    position: relative;
+    top: 30px;
+    left: 100px;
+    background-image: url('./img/mobile_controlles/throw.svg');
+    background-size: 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+.jumpButton {
+    height: 75px;
+    width: 75px;
+    position: relative;
+    bottom: 90px;
+    left: 410px;
+    background-image: url('./img/mobile_controlles/jump.svg');
+    background-size: 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+.runLeft {
+    background-image: url('./img/mobile_controlles/run_left.svg');
+    background-size: 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+.runRight {
+    background-image: url('./img/mobile_controlles/run_right.svg');
+    background-size: 40px;
+    background-repeat: no-repeat;
+    background-position: center;
 }

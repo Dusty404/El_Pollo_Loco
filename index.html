@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>El Pollo Loco</title>
-    <link rel="icon" type="image/x-icon" href="img/4_enemie_boss_chicken/2_alert/G10.png">
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="img/4_enemie_boss_chicken/2_alert/G10.png"
+    />
 
-    <link rel="stylesheet" href="style.css">
-    
+    <link rel="stylesheet" href="style.css" />
+
     <script src="models/drawableObject.class.js"></script>
     <script src="models/statusbar.class.js"></script>
     <script src="statusbars/statusbar-HP.js"></script>
@@ -30,12 +34,35 @@
     <script src="models/bottle.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="js/game.js"></script>
-    
-    
-</head>
-<body onload="init()"> 
+  </head>
+  <body>
     <h1>El Pollo Loco</h1>
-    
+
     <canvas id="canvas" width="720" height="480"></canvas>
-</body>
+    <div id="menuOverlay" class="menuOverlay backgroundImage">
+      <div class="optionButtonsRow">
+        <butto id="muteSound" class="optionButton"></butto>
+        <butto id="muteMusic" class="optionButton"></butto>
+        <butto id="fullscreen" class="optionButton"></butto>
+      </div>
+      <button id="startGame" onclick="init()" class="startGameButton">
+        Start Game
+      </button>
+      <div id="mobileControlles" class="mobileControlles d-none">
+        <butto id="mobileRunLeft" class="mobileControlleButton runLeft"></butto>
+        <button
+          id="mobileJump"
+          class="mobileControlleButton jumpButton"
+        ></button>
+        <button
+          id="mobileThrowBottle"
+          class="mobileControlleButton throwBottleButton"
+        ></button>
+        <butto
+          id="mobileRunRigth"
+          class="mobileControlleButton runRight"
+        ></butto>
+      </div>
+    </div>
+  </body>
 </html>
