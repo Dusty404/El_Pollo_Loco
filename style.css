@@ -1,16 +1,20 @@
 .d-none {
-    display: none;
+    display: none !important;
 }
 
 
 body {
     display: flex;
-    max-height: 100vh;
-    height: 100%;
+    height: 100vh;
+    width: 100vw;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     background-image: url('img/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    margin: 0;
 }
 
 
@@ -50,8 +54,16 @@ canvas {
     display: block;
     width: 40px;
     height: 40px;
-    background-color: aquamarine;
-    border: 1px solid gray;
+    background-color: #FF9B00;
+    border: 2px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.optionButton img {
+    max-height: 90%;
 }
 
 
@@ -78,6 +90,7 @@ canvas {
     background-color: #FF9B00;
     border-radius: 50px;
     margin: 10px;
+    border: 2px solid black;
 }
 
 
@@ -120,4 +133,10 @@ canvas {
     background-size: 40px;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+
+.fullscreen {
+    height: 100vh;
+    width: 100vw;
 }
