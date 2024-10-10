@@ -1,6 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let fullscreen = false;
 
 
 function init() {
@@ -114,4 +115,17 @@ function showgame() {
     let startButton = document.getElementById('startGame');
     overlay.classList.remove('backgroundImage');
     startButton.classList.add('d-none');
+}
+
+
+function fullscreenOption() {
+    if (!fullscreen) {
+        document.getElementById('canvas').classList.add('fullscreen');
+        document.getElementById('menuOverlay').classList.add('fullscreen');
+        fullscreen = true;
+    } else if (fullscreen) {
+        document.getElementById('canvas').classList.remove('fullscreen');
+        document.getElementById('menuOverlay').classList.remove('fullscreen');
+        fullscreen = false;
+    }
 }
