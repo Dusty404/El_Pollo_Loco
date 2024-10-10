@@ -5,7 +5,6 @@
 
 body {
     display: flex;
-    max-height: 100vh;
     height: 100%;
     align-items: center;
     justify-content: center;
@@ -16,6 +15,7 @@ body {
 
 canvas {
     background-color: black;
+    display: block;
 }
 
 
@@ -32,7 +32,7 @@ canvas {
 
 .backgroundImage {
     background-image: url('img/9_intro_outro_screens/start/startscreen_2.png');
-    background-size: contain;
+    background-size: 720px 480px;
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -120,4 +120,25 @@ canvas {
     background-size: 40px;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+}
+
+
+@media only screen and (max-height: 720px) {
+    body h1 {
+        display: none;
+    }
+}
+
+
+@media only screen and (max-height: 480px) {
+    canvas {
+        height: 100%;
+    }
 }

@@ -4,7 +4,7 @@ boss {
 }
 
 pepe {
-    
+    jump animation
 }
 
 
@@ -14,19 +14,14 @@ hünchen {
 
 
 welt {
-    vergörßern
-    mehr gegner
-    mehr alles
+
 }
 
 Ui {
-    start game
     win game
     game over
-    hintergund
     optionen für saound etc
     handy optimirung
-    handy steuerung
 }
 
 */
