@@ -11,8 +11,10 @@ class World {
   statusbarBossHP = new StatusbarBossHP();
   throwableObject = [];
   meet = false;
+  sounds = [];
 
   hurt_sound = new Audio("audio/hurt.mp3");
+  
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -21,12 +23,17 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
+    this.pushsound();
   }
 
   setWorld() {
     this.character.world = this;
   }
 
+  pushsound() {
+    this.sounds.push(this.hurt_sound);
+  }
+  
   run() {
     setInterval(() => {
       this.checkCollisonEnemie();

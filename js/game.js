@@ -113,19 +113,37 @@ function mobileControlls() {
 function showgame() {
     let overlay = document.getElementById('menuOverlay');
     let startButton = document.getElementById('startGame');
+    let canvas = document.getElementById('canvas');
+    let controlls = document.getElementById('mobileControlles');
+    let menu = document.getElementById('optionButtonsRow');
+    canvas.classList.remove('d-none');
     overlay.classList.remove('backgroundImage');
+    menu.classList.add('menuInGame');
     startButton.classList.add('d-none');
+    controlls.classList.remove('d-none');
 }
 
 
 function fullscreenOption() {
     if (!fullscreen) {
         document.getElementById('canvas').classList.add('fullscreen');
-        document.getElementById('menuOverlay').classList.add('fullscreen');
+        document.getElementById('menuOverlay').classList.add('menuFullscreen');
+        document.getElementById('header').classList.add('d-none');
+        document.getElementById('mobileControlles').classList.add('mobileControllesFullscreen');
         fullscreen = true;
     } else if (fullscreen) {
         document.getElementById('canvas').classList.remove('fullscreen');
-        document.getElementById('menuOverlay').classList.remove('fullscreen');
+        document.getElementById('menuOverlay').classList.remove('menuFullscreen');
+        document.getElementById('header').classList.remove('d-none');
+        document.getElementById('mobileControlles').classList.remove('mobileControllesFullscreen');
         fullscreen = false;
     }
+}
+
+
+function gameOver() {
+    this.world.sounds.forEach(sound => {
+        sound.pause();
+    });
+    
 }

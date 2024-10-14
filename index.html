@@ -36,11 +36,12 @@
     <script src="js/game.js"></script>
   </head>
   <body>
-    <h1>El Pollo Loco</h1>
+    <h1 id="header">El Pollo Loco</h1>
 
-    <canvas id="canvas" width="720" height="480"></canvas>
+   
     <div id="menuOverlay" class="menuOverlay backgroundImage">
-      <div class="optionButtonsRow">
+       <canvas id="canvas" class="d-none" width="720" height="480"></canvas>
+      <div id="optionButtonsRow" class="optionButtonsRow">
         <butto id="muteSound" class="optionButton"><img src="img/optionButtons/volume-high-solid.svg"></butto>
         <butto id="muteMusic" class="optionButton"><img src="img/optionButtons/music-solid.svg"></butto>
         <butto id="fullscreen" class="optionButton" onclick="fullscreenOption()"><img src="img/optionButtons/expand-solid.svg"></butto>
@@ -49,7 +50,14 @@
         Start Game
       </button>
       <div id="mobileControlles" class="mobileControlles d-none">
+        <div class="buttons">
         <butto id="mobileRunLeft" class="mobileControlleButton runLeft"></butto>
+        <butto
+          id="mobileRunRigth"
+          class="mobileControlleButton runRight"
+        ></butto>
+        </div>
+        <div class="buttons">
         <button
           id="mobileJump"
           class="mobileControlleButton jumpButton"
@@ -58,10 +66,7 @@
           id="mobileThrowBottle"
           class="mobileControlleButton throwBottleButton"
         ></button>
-        <butto
-          id="mobileRunRigth"
-          class="mobileControlleButton runRight"
-        ></butto>
+        </div>
       </div>
     </div>
   </body>
