@@ -98,6 +98,11 @@ class Endboss extends MoveableObject {
     }
 
 
+    stopGame() {
+        for (let i = 1; i < 9999; i++) window.clearInterval(i);
+    }
+
+
     animate() {
         this.bossWalk();
         if (this.HP > 0) {
@@ -133,6 +138,10 @@ class Endboss extends MoveableObject {
                 this.BossIsDead = true;
                 this.deathAnimation();
                 clearInterval(this.Deathcheckint);
+                setTimeout(() => {
+                    this.winGame();
+                    this.stopGame();
+                }, 3000);
             }
         }, 10);
     }
@@ -251,6 +260,13 @@ class Endboss extends MoveableObject {
         this.bossalerte = setInterval(() => {
             this.playAnimation(this.alert_animation_Images);
         }, 600);
+    }
+
+
+    winGame() {
+        document.getElementById('endgameImg').src = 'img/9_intro_outro_screens/win/won_2.png';
+        document.getElementById('endgameImg').classList.remove('d-none');
+        document.getElementById('mobileControlles').classList.add('d-none');
     }
 
 }

@@ -96,14 +96,13 @@ class Character extends MoveableObject {
     this.loadImages(this.lazy_animation_Images);
     this.animation();
     this.applyGravity();
-    //this.testint();
   }
 
-  testint() {
-    setInterval(() => {
-      console.log(this.speedY)
-    }, 10);
+
+  stopGame() {
+    for (let i = 1; i < 9999; i++) window.clearInterval(i);
   }
+
 
   animation() {
     setInterval(() => {
@@ -168,7 +167,9 @@ class Character extends MoveableObject {
       this.x -= 10;
     }, 142.85);
     setTimeout(() => {
-      clearInterval(this.dead);
+      this.world.stopGame();
+      this.showEndscreen();
+      this.tryAgain();
     }, 1000);
   }
 
@@ -211,5 +212,17 @@ class Character extends MoveableObject {
     clearInterval(this.idlInt);
     clearInterval(this.lazyInt);
     clearTimeout(this.lazyTimeout);
+  }
+
+  
+  showEndscreen() {
+    document.getElementById('endgameImg').classList.remove('d-none');
+    document.getElementById('mobileControlles').classList.add('d-none');
+  }
+
+
+  tryAgain() {
+    document.getElementById('startGame').innerHTML = 'Try Again?';
+    document.getElementById('startGame').classList.remove('d-none');
   }
 }

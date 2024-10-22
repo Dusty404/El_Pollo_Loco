@@ -12,6 +12,7 @@ class World {
   throwableObject = [];
   meet = false;
   sounds = [];
+  intervallArr = [];
 
   hurt_sound = new Audio("audio/hurt.mp3");
   
@@ -25,6 +26,12 @@ class World {
     this.run();
     this.pushsound();
   }
+
+
+  stopGame() {
+    for (let i = 1; i < 9999; i++) window.clearInterval(i);
+  }
+
 
   setWorld() {
     this.character.world = this;

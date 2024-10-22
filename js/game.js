@@ -4,12 +4,14 @@ let keyboard = new Keyboard();
 let fullscreen = false;
 
 
+
 function init() {
     startLvl();
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
     mobileControlls();
     showgame();
+    document.getElementById('endgameImg').classList.add('d-none');
 }
 
 
@@ -127,12 +129,14 @@ function showgame() {
 function fullscreenOption() {
     if (!fullscreen) {
         document.getElementById('canvas').classList.add('fullscreen');
+        document.getElementById('endgameImg').classList.add('menuFullscreen');
         document.getElementById('menuOverlay').classList.add('menuFullscreen');
         document.getElementById('header').classList.add('d-none');
         document.getElementById('mobileControlles').classList.add('mobileControllesFullscreen');
         fullscreen = true;
     } else if (fullscreen) {
         document.getElementById('canvas').classList.remove('fullscreen');
+        document.getElementById('endgameImg').classList.remove('menuFullscreen');
         document.getElementById('menuOverlay').classList.remove('menuFullscreen');
         document.getElementById('header').classList.remove('d-none');
         document.getElementById('mobileControlles').classList.remove('mobileControllesFullscreen');
@@ -141,8 +145,15 @@ function fullscreenOption() {
 }
 
 
+function muteAll() {
+    document.querySelectorAll('audio').forEach(function(audio) {
+        audio.muted = true;
+    });
+}
+
+
 function gameOver() {
-    this.world.sounds.forEach(sound => {
+    window.forEach(sound => {
         sound.pause();
     });
     
