@@ -131,30 +131,19 @@ function fullscreenOption() {
         document.getElementById('canvas').classList.add('fullscreen');
         document.getElementById('endgameImg').classList.add('menuFullscreen');
         document.getElementById('menuOverlay').classList.add('menuFullscreen');
+        document.getElementById('menuOverlay').classList.remove('border');
         document.getElementById('header').classList.add('d-none');
         document.getElementById('mobileControlles').classList.add('mobileControllesFullscreen');
+        document.getElementById('fsImg').src = 'img/optionButtons/compress-solid.svg';
         fullscreen = true;
     } else if (fullscreen) {
         document.getElementById('canvas').classList.remove('fullscreen');
         document.getElementById('endgameImg').classList.remove('menuFullscreen');
         document.getElementById('menuOverlay').classList.remove('menuFullscreen');
+        document.getElementById('menuOverlay').classList.add('border');
         document.getElementById('header').classList.remove('d-none');
         document.getElementById('mobileControlles').classList.remove('mobileControllesFullscreen');
+        document.getElementById('fsImg').src = 'img/optionButtons/expand-solid.svg';
         fullscreen = false;
     }
-}
-
-
-function muteAll() {
-    document.querySelectorAll('audio').forEach(function(audio) {
-        audio.muted = true;
-    });
-}
-
-
-function gameOver() {
-    window.forEach(sound => {
-        sound.pause();
-    });
-    
 }

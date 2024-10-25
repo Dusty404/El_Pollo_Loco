@@ -12,6 +12,7 @@ class Character extends MoveableObject {
   alreadyIdl = false;
   lazy = false;
   alreadyLazy = false;
+  isMoving = false;
 
   offset = {
     top: 100,
@@ -40,18 +41,14 @@ class Character extends MoveableObject {
     "img/2_character_pepe/1_idle/idle/I-9.png",
     "img/2_character_pepe/1_idle/idle/I-10.png",
   ];
-  jump_nimation_Images = [
+  jump_animation_Images = [
     "img/2_character_pepe/3_jump/J-32.png",
     "img/2_character_pepe/3_jump/J-33.png",
     "img/2_character_pepe/3_jump/J-34.png",
     "img/2_character_pepe/3_jump/J-34.png",
     "img/2_character_pepe/3_jump/J-35.png",
     "img/2_character_pepe/3_jump/J-36.png",
-    "img/2_character_pepe/3_jump/J-36.png",
     "img/2_character_pepe/3_jump/J-37.png",
-    "img/2_character_pepe/3_jump/J-37.png",
-    "img/2_character_pepe/3_jump/J-38.png",
-    "img/2_character_pepe/3_jump/J-39.png",
   ];
   dead_animation = [
     "img/2_character_pepe/5_dead/D-51.png",
@@ -80,17 +77,15 @@ class Character extends MoveableObject {
     "img/2_character_pepe/1_idle/long_idle/I-20.png",
   ];
   world;
-
-  walking_sound = new Audio("audio/walking.mp3");
-  hurt_sound = new Audio("audio/hurt.mp3");
-  jump_sound = new Audio("audio/jump.mp3");
   
+
+
 
   constructor() {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png");
     this.loadImages(this.walk_animation_Images);
     this.loadImages(this.idl_animation);
-    this.loadImages(this.jump_nimation_Images);
+    this.loadImages(this.jump_animation_Images);
     this.loadImages(this.dead_animation);
     this.loadImages(this.hurt_Animation_Images);
     this.loadImages(this.lazy_animation_Images);
@@ -102,6 +97,7 @@ class Character extends MoveableObject {
   stopGame() {
     for (let i = 1; i < 9999; i++) window.clearInterval(i);
   }
+
 
 
   animation() {
@@ -122,9 +118,8 @@ class Character extends MoveableObject {
       }
 
       if (this.world.keyboard.SPACE && !this.isAboveGround() && this.HP > 0) {
-        this.walking_sound.pause();
-        this.jump_sound.play();
-        this.world.sounds.push(this.jump_sound);
+        this.world.walking_sound.pause();
+        this.world.jump_sound.play();
         this.jump();
       }
     }, 1000 / 60);
@@ -141,26 +136,34 @@ class Character extends MoveableObject {
         this.setFalse();
         this.playAnimation(this.hurt_Animation_Images);
       } else if (this.isAboveGround()) {
+        this.world.walking_sound.pause();
         this.setFalse();
         this.jumpAnimation();
       } else if (!this.world.keyboard.LEFT && !this.world.keyboard.RIGHT && this.HP > 0 && !this.alreadyIdl) {
         this.idlAnimation();
+        this.isMoving = false;
       } else if (this.lazy && !this.alreadyLazy) {
         this.lazyAniamtion();
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.setFalse();
+        this.isMoving = true;
         this.playAnimation(this.walk_animation_Images);
-        this.walking_sound.play();
+        this.world.walking_sound.play();
       }
       if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
-        this.walking_sound.pause();
+        this.world.walking_sound.pause();
       }
-      console.log(this.speedY)
     }, 50);
   }
 
   deadAnimation() {
+    soundsArr.forEach(sound => {
+      sound.pause();
+    });
+    bgMusic.pause();
+    bgMusic.currentTime = 0;
     clearInterval(this.movementInt);
+    clearInterval(this.jumpInt);
     this.speedY = 20;
     this.dead = setInterval(() => {
       this.playAnimation(this.dead_animation);
@@ -175,13 +178,24 @@ class Character extends MoveableObject {
 
   jumpAnimation() {
     clearInterval(this.movementInt);
+    clearInterval(this.jumpInt);
+    this.currentImage = 0;
     this.jumpInt = setInterval(() => {
-      this.playAnimation(this.jump_nimation_Images);
-      if (this.y == 180) {
+      if (this.isDead()) {
         clearInterval(this.jumpInt);
         this.movement();
       }
-    }, 140);
+        this.playAnimation(this.jump_animation_Images);
+        if (this.currentImage >= this.jump_animation_Images.length) {
+            this.currentImage = this.jump_animation_Images.length - 1;
+            this.img = this.imageCache[this.jump_animation_Images[this.currentImage]];
+            if (this.y == 180) {
+                clearInterval(this.jumpInt);
+                this.idlAnimation();
+                this.movement();
+            }
+        }
+    }, 80);
   }
 
   idlAnimation() {

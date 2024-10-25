@@ -11,10 +11,14 @@ class World {
   statusbarBossHP = new StatusbarBossHP();
   throwableObject = [];
   meet = false;
-  sounds = [];
-  intervallArr = [];
+  sounds = soundsArr;
+  backgroundMusic = bgMusic;
+  showHPBar = false;
 
+
+  walking_sound = new Audio("audio/walking.mp3");
   hurt_sound = new Audio("audio/hurt.mp3");
+  jump_sound = new Audio("audio/jump.mp3");
   
 
   constructor(canvas, keyboard) {
@@ -24,7 +28,24 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
-    this.pushsound();
+    this.pushSounds();
+    this.playBackgroundMusic();
+  }
+
+
+  cheats() {
+    world.statusbarBottle.bottle_count = 2000000000000;
+    world.character.HP = 200000
+  }
+
+
+  pushSounds() {
+    this.sounds.push(this.walking_sound, this.hurt_sound, this.jump_sound);
+  }
+
+
+  playBackgroundMusic() {
+    this.backgroundMusic.play();
   }
 
 
@@ -35,10 +56,6 @@ class World {
 
   setWorld() {
     this.character.world = this;
-  }
-
-  pushsound() {
-    this.sounds.push(this.hurt_sound);
   }
   
   run() {
@@ -59,7 +76,7 @@ class World {
         }
       });
       if (this.character.x > this.lvl.level_end_x) {
-        this.character.x--;
+        this.character.x - enemie.speedFactor - 1;
       }
     }, 10);
   }
@@ -70,7 +87,9 @@ class World {
         if (enemie instanceof Endboss) {
           enemie.meet = true;
           this.meet = true;
-          console.log(this.meet, enemie.meet);
+          setTimeout(() => {
+            this.showHPBar = true;
+        }, 6000);  
         }
       });
     }
@@ -109,6 +128,7 @@ class World {
       if (this.character.isCollidingTop(enemie) && this.character.HP > 0 && this.character.speedY < 0) {
         enemie.HP--;
         this.character.speedY = 20;
+        this.character.jumpAnimation();
       }
 
       if ((enemie instanceof Chicken || enemie instanceof ChickenSmall) && enemie.HP === 0 && !enemiesToRemove.includes(enemie)) {
@@ -137,9 +157,8 @@ class World {
         if (bottle.hit) continue;
         if (bottle.isColliding(enemie) && enemie instanceof Endboss) {
           bottle.hit = true;
-          if (enemie.HP > 0 && !enemie.gotHit && enemie.x < 5000) {
+          if (enemie.HP > 0 && !enemie.gotHit && enemie.x < 5100) {
             enemie.gotHit = true;
-            console.log(enemie.gotHit);
             enemie.HP--;
             this.statusbarBossHP.setPercentage(enemie.HP * 20);
           }
@@ -155,7 +174,6 @@ class World {
           bottle.hit = true;
           if (enemie.HP > 0 && !enemie.gotHit) {
             enemie.gotHit = true;
-            console.log(enemie.gotHit);
             enemie.HP--;
           } else if (enemie.HP > 0) {
             enemie.HP--;
@@ -180,7 +198,6 @@ class World {
         const index = this.lvl.enemies.indexOf(enemie);
         if (index > -1) {
           this.lvl.enemies.splice(index, 1);
-          console.log("Gegner entfernt:", enemie);
         }
       }, delay);
     });
@@ -255,7 +272,9 @@ class World {
     this.addToMap(this.statusbarCoins);
     this.addToMap(this.statusbarBottle);
     this.addToMap(this.statusbarBottle);
-    this.addToMap(this.statusbarBossHP);
+    if(this.showHPBar) {
+      this.addToMap(this.statusbarBossHP);
+    }
     this.ctx.translate(this.camera_x, 0);
 
     this.addToMap(this.character);
@@ -275,18 +294,20 @@ class World {
     });
   }
 
+  
   addToMap(object) {
     if (object.otherDirection) {
       this.flipImage(object);
     }
 
     object.draw(this.ctx);
-    //object.drawObjectFrame(this.ctx);
+
 
     if (object.otherDirection) {
       this.flipImageBack(object);
     }
   }
+
 
   flipImage(object) {
     this.ctx.save();
@@ -294,6 +315,7 @@ class World {
     this.ctx.scale(-1, 1);
     object.x = object.x * -1;
   }
+
 
   flipImageBack(object) {
     object.x = object.x * -1;

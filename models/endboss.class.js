@@ -111,10 +111,10 @@ class Endboss extends MoveableObject {
             }, 25);
             this.hitregInterval = setInterval(() => {
                 this.bossHP();
-            }, 10);
+            }, );
             this.checkAttack = setInterval(() => {
                 this.attackCheck();
-            }, 10);
+            }, );
         }
     }
 
@@ -170,7 +170,7 @@ class Endboss extends MoveableObject {
 
 
     bossAttack() {
-        if (this.HP > 0) {
+        if (this.HP > 0 && !this.gotHit) {
             clearInterval(this.walk);
             clearInterval(this.hurt);
             clearInterval(this.bossDeath);
@@ -206,7 +206,6 @@ class Endboss extends MoveableObject {
             }, 100);
             setTimeout(() => {
                 this.gotHit = false;
-                console.log(this.gotHit);
             }, 2000);
         }
     }
@@ -215,7 +214,6 @@ class Endboss extends MoveableObject {
     attackCheck() {
         if (this.attack === true && !this.attackCooldown) {
             clearInterval(this.walk);
-            clearInterval(this.hurt);
             this.attackCooldown = true;
             this.bossAttack();
             setTimeout(() => {
@@ -249,7 +247,7 @@ class Endboss extends MoveableObject {
                     clearInterval(this.bossalerte);
                     this.speedFactor = 2;
                     this.animate();
-                }, 3000);  
+                }, 2800);  
             }
         }, 10);
     }

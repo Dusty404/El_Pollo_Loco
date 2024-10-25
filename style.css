@@ -241,3 +241,9 @@ canvas {
 .menuInGame {
     position: fixed;
 }
+
+
+.border {
+    border: solid 5px #FF9B00;
+    border-radius: 5px;
+}
