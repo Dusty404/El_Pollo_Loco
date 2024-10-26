@@ -68,18 +68,29 @@ class World {
     setInterval(() => {
       this.checkCollison();
       this.firstmeet();
-      this.lvl.enemies.forEach((enemie) => {
-        if (enemie instanceof Endboss) {
-          if (enemie.bossAnimationStart === true) {
-            this.lvl.level_end_x = enemie.x;
-          }
-        }
-      });
-      if (this.character.x > this.lvl.level_end_x) {
-        this.character.x - enemie.speedFactor - 1;
-      }
+      this.setBossRelativMapEnd();
+      this.playerPushBackByMapend();
     }, 10);
   }
+
+
+  setBossRelativMapEnd() {
+    this.lvl.enemies.forEach((enemie) => {
+      if (enemie instanceof Endboss) {
+        if (enemie.bossAnimationStart === true) {
+          this.lvl.level_end_x = enemie.x;
+        }
+      }
+    });
+  }
+
+
+  playerPushBackByMapend() {
+    if (this.character.x > this.lvl.level_end_x) {
+      this.character.x - enemie.speedFactor - 1;
+    };
+  }
+
 
   firstmeet() {
     if (this.character.x === 4800 && !this.meet) {
@@ -104,10 +115,7 @@ class World {
   checkCollisonEnemie() {
     this.lvl.enemies.forEach((enemie) => {
       if (
-        this.character.isColliding(enemie) &&
-        this.character.HP > 0 &&
-        enemie instanceof Endboss
-      ) {
+        this.character.isColliding(enemie) && this.character.HP > 0 && enemie instanceof Endboss) {
         enemie.attack = true;
         this.character.hit();
         this.statusbar.setPercentage(this.character.HP);
@@ -123,30 +131,43 @@ class World {
 
   checkCollisionTop() {
     const enemiesToRemove = [];
-
     this.lvl.enemies.forEach((enemie) => {
-      if (this.character.isCollidingTop(enemie) && this.character.HP > 0 && this.character.speedY < 0) {
-        enemie.HP--;
-        this.character.speedY = 20;
-        this.character.jumpAnimation();
-      }
-
-      if ((enemie instanceof Chicken || enemie instanceof ChickenSmall) && enemie.HP === 0 && !enemiesToRemove.includes(enemie)) {
-        enemiesToRemove.push(enemie);
-        clearInterval(enemie.walk);
-        clearInterval(enemie.walkanimation);
-      }
+      this.jumpOnEnemie(enemie);
+      this.deleteEnemieFromMap(enemie, enemiesToRemove);
     });
+    this.deleteEnemie(enemiesToRemove);
+  }
 
+
+  jumpOnEnemie(enemie) {
+    if (this.character.isCollidingTop(enemie) && this.character.HP > 0 && this.character.speedY < 0) {
+      enemie.HP--;
+      this.character.speedY = 20;
+      this.character.jumpAnimation();
+    };
+  }
+
+
+  deleteEnemieFromMap(enemie, enemiesToRemove) {
+    if ((enemie instanceof Chicken || enemie instanceof ChickenSmall) && enemie.HP === 0 && !enemiesToRemove.includes(enemie)) {
+      enemiesToRemove.push(enemie);
+      clearInterval(enemie.walk);
+      clearInterval(enemie.walkanimation);
+    };
+  }
+
+
+  deleteEnemie(enemiesToRemove) {
     enemiesToRemove.forEach((enemie) => {
       setTimeout(() => {
         const index = this.lvl.enemies.indexOf(enemie);
         if (index > -1) {
           this.lvl.enemies.splice(index, 1);
         }
-      }, 100);
+      }, 200);
     });
   }
+
 
   checkCollisonEnemieAndBottle() {
     const enemiesToRemove = [];

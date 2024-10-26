@@ -37,6 +37,7 @@ class ChickenSmall extends MoveableObject {
         this.loadImages(this.walk_animation_Images);
         this.loadImages(this.chicken_dead);
         this.animation();
+        this.checkdeath();
         this.setChickenPosition();
     }
 
