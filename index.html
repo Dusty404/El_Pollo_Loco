@@ -46,9 +46,10 @@
         <img id="endgameImg" class="endgameImg d-none" src="img/9_intro_outro_screens/game_over/game over.png">
       </div>
       <div id="optionButtonsRow" class="optionButtonsRow">
-        <butto id="muteSound" class="optionButton" onclick="muteSounds()"><img id="soundImg" src="img/optionButtons/volume-high-solid.svg"></butto>
-        <butto id="muteMusic" class="optionButton" onclick="muteMusic()"><img id="musicImg" src="img/optionButtons/music-solid.svg"></butto>
-        <butto id="fullscreen" class="optionButton" onclick="fullscreenOption()"><img id="fsImg" src="img/optionButtons/expand-solid.svg"></butto>
+        <button id="controlles" class="optionButton" onclick="showControlles()"><img id="controllesImg" src="img/optionButtons/gamepad-solid.svg"></button>
+        <button id="muteSound" class="optionButton" onclick="muteSounds()"><img id="soundImg" src="img/optionButtons/volume-high-solid.svg"></button>
+        <button id="muteMusic" class="optionButton" onclick="muteMusic()"><img id="musicImg" src="img/optionButtons/music-solid.svg"></button>
+        <button id="fullscreen" class="optionButton" onclick="fullscreenOption()"><img id="fsImg" src="img/optionButtons/expand-solid.svg"></button>
       </div>
       <button id="startGame" onclick="init()" class="startGameButton">
         Start Game
@@ -71,6 +72,15 @@
           class="mobileControlleButton throwBottleButton"
         ></button>
         </div>
+      </div>
+    </div>
+    <div id="controllesWindow" class="controllesWindow border">
+      <h1>Controlles</h1>
+      <div class="controllePictures">
+        <img class="border" src="img/optionButtons/arrow-left-solid.svg" alt="">
+        <img class="border" src="img/optionButtons/arrow-right-solid.svg" alt="">
+        <h2 class="border">D</h2>
+        <h2 class="border">SPACE</h2>
       </div>
     </div>
   </body>

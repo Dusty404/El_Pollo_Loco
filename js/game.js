@@ -147,3 +147,8 @@ function fullscreenOption() {
         fullscreen = false;
     }
 }
+
+
+function showControlles() {
+    document.getElementById('controllesWindow').classList.toggle('d-none');
+}

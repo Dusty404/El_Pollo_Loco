@@ -81,6 +81,8 @@ canvas {
 
 .optionButton img {
     max-height: 90%;
+    height: 30px;
+    width: 30px;
 }
 
 
@@ -246,4 +248,28 @@ canvas {
 .border {
     border: solid 5px #FF9B00;
     border-radius: 5px;
+}
+
+
+.controllesWindow {
+
+    background-color: aqua;
+
+    position: absolute;
+    top: 35vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 300px;
+    width: 400px;
+}
+
+
+.controllePictures {
+    display: flex;
+}
+
+
+.controllePictures img {
+    height: 50px;
 }
