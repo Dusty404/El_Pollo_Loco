@@ -68,7 +68,6 @@ class ThrowableObject extends MoveableObject {
         if (this.hit === false) {
             this.spinanimation();
         }},50);
-
     }
 
 

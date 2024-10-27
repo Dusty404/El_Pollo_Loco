@@ -103,29 +103,37 @@ class Character extends MoveableObject {
   animation() {
     setInterval(() => {
       this.world.camera_x = -this.x + 100;
-
-      if (
-        this.world.keyboard.RIGHT &&
-        this.x < this.world.lvl.level_end_x &&
-        this.HP > 0
-      ) {
-        this.moveRight();
-      }
-
-      if (this.world.keyboard.LEFT && this.x > 0 && this.HP > 0) {
-        this.moveLeft();
-        this.otherDirection = true;
-      }
-
-      if (this.world.keyboard.SPACE && !this.isAboveGround() && this.HP > 0) {
-        this.world.walking_sound.pause();
-        this.world.jump_sound.play();
-        this.jump();
-      }
+      this.animateGoRight();
+      this.animateGoLeft();
+      this.animateJump();
     }, 1000 / 60);
-
     this.movement();
   }
+
+
+  animateGoRight() {
+    if (this.world.keyboard.RIGHT && this.x < this.world.lvl.level_end_x && this.HP > 0) {
+      this.moveRight();
+    }
+  }
+
+
+  animateGoLeft() {
+    if (this.world.keyboard.LEFT && this.x > 0 && this.HP > 0) {
+      this.moveLeft();
+      this.otherDirection = true;
+    }
+  }
+
+
+  animateJump() {
+    if (this.world.keyboard.SPACE && !this.isAboveGround() && this.HP > 0) {
+      this.world.walking_sound.pause();
+      this.world.jump_sound.play();
+      this.jump();
+    }
+  }
+
 
   movement() {
     this.movementInt = setInterval(() => {

@@ -20,10 +20,9 @@ class MoveableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.accelration;
-
                 if (this instanceof Character && this.y > 180 && world.character.HP > 0) {
-                this.y = 180;
-                this.speedY = 0;
+                    this.y = 180;
+                    this.speedY = 0;
                 }
             };
         }, 30  );
@@ -77,19 +76,15 @@ class MoveableObject extends DrawableObject {
         const playerTop = this.y + this.offset.top;
     
         return (this.x + this.width - this.offset.right) > (object.x + object.offset.left) && 
-               playerBottom > objectTop && // Spieler ist unter der Oberkante des Objekts
+               playerBottom > objectTop &&
                (this.x + this.offset.left) < (object.x + object.width - object.offset.right) &&
-               (playerTop < objectBottom); // Spieler muss unter der Unterkante des Objekts sein
+               (playerTop < objectBottom);
     }
 
 
     isCollidingTop(object) {
-        // Die Y-Koordinate der Oberkante des anderen Objekts
-    const objectTop = object.y + object.offset.top;
-
-    // Die Y-Koordinate der Unterkante des Spielerbildes
-    const playerBottom = this.y + this.height - this.offset.bottom;
-
+        const objectTop = object.y + object.offset.top; 
+        const playerBottom = this.y + this.height - this.offset.bottom;
     return (this.x + this.width - this.offset.right) > (object.x + object.offset.left) && 
            playerBottom > objectTop && // Unterkante des Spielers ist unter der Oberkante des Objekts
            (this.x + this.offset.left) < (object.x + object.width - object.offset.right) &&

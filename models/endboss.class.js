@@ -153,19 +153,22 @@ class Endboss extends MoveableObject {
             clearInterval(this.hurt);
             clearInterval(this.attackInt);
             clearInterval(this.bossDeath);
-
             this.bossDeath = setInterval(() => {
                 this.playAnimation(this.hurt_animation_Images);
             }, 100);
-
             setTimeout(() => {
-                clearInterval(this.bossDeath);
-                this.bossDeath = setInterval(() => {
-                    this.loadImage(this.dead_animation_Images[0]);
-                    this.playAnimation(this.dead_animation_Images);
-                }, 200);
+                this.playBossDeathAnimation();
             }, 2000);
         }
+    }
+
+
+    playBossDeathAnimation() {        
+        clearInterval(this.bossDeath);
+        this.bossDeath = setInterval(() => {
+            this.loadImage(this.dead_animation_Images[0]);
+            this.playAnimation(this.dead_animation_Images);
+        }, 200);        
     }
 
 
@@ -174,11 +177,9 @@ class Endboss extends MoveableObject {
             clearInterval(this.walk);
             clearInterval(this.hurt);
             clearInterval(this.bossDeath);
-
             this.attackInt = setInterval(() => {
                 this.playAnimation(this.attack_animation_Images);
             }, 200);
-
             setTimeout(() => {
                 clearInterval(this.attackInt);
                 this.attack = false;
@@ -234,22 +235,27 @@ class Endboss extends MoveableObject {
     firstMeetAnimation() {
         this.bossWalk();
         this.firstMeetAnimationInt = setInterval(() => {
-            if(this.x > 5100 && this.bossAnimationStart === false) {
+            if(this.x > 5100 && !this.bossAnimationStart) {
                 this.speedFactor = 1;
                 this.x -= this.speedFactor;
             } else {
-                this.speedFactor = 0;
-                clearInterval(this.walk);
-                this.bossAnimationStart = true;
-                clearInterval(this.firstMeetAnimationInt);
-                this.bossAlert();
-                setTimeout(() => {
-                    clearInterval(this.bossalerte);
-                    this.speedFactor = 2;
-                    this.animate();
-                }, 2800);  
+                this.playMeetAnimation();
             }
         }, 10);
+    }
+
+
+    playMeetAnimation() {
+        this.speedFactor = 0;
+        clearInterval(this.walk);
+        this.bossAnimationStart = true;
+        clearInterval(this.firstMeetAnimationInt);
+        this.bossAlert();
+        setTimeout(() => {
+            clearInterval(this.bossalerte);
+            this.speedFactor = 2;
+            this.animate();
+        }, 2800);  
     }
 
 

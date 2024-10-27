@@ -14,6 +14,8 @@ class World {
   sounds = soundsArr;
   backgroundMusic = bgMusic;
   showHPBar = false;
+  enemiesToRemove = [];
+  hitCD = false;
 
 
   walking_sound = new Audio("audio/walking.mp3");
@@ -61,7 +63,7 @@ class World {
   run() {
     setInterval(() => {
       this.checkCollisonEnemie();
-    }, 600);
+    }, );
     setInterval(() => {
       this.checkThrowObjects();
     }, 200);
@@ -70,7 +72,7 @@ class World {
       this.firstmeet();
       this.setBossRelativMapEnd();
       this.playerPushBackByMapend();
-    }, 10);
+    }, );
   }
 
 
@@ -114,28 +116,45 @@ class World {
 
   checkCollisonEnemie() {
     this.lvl.enemies.forEach((enemie) => {
-      if (
-        this.character.isColliding(enemie) && this.character.HP > 0 && enemie instanceof Endboss) {
-        enemie.attack = true;
-        this.character.hit();
-        this.statusbar.setPercentage(this.character.HP);
-        this.hurt_sound.play();
-      } else if (this.character.isColliding(enemie) && this.character.HP > 0 && enemie.HP > 0) {
-        this.character.hit();
-        this.statusbar.setPercentage(this.character.HP);
-        this.hurt_sound.play();
+      if (this.character.isColliding(enemie) && this.character.HP > 0 && enemie instanceof Endboss && !this.hitCD) {
+        this.gotHitByBoss(enemie);
+      } else if (this.character.isColliding(enemie) && this.character.HP > 0 && enemie.HP > 0 &&
+                !this.hitCD && !this.character.isCollidingTop(enemie)) {
+        this.gotHitByChicken(enemie);
       }
     });
   }
 
 
+  gotHitByBoss(enemie) {
+    enemie.attack = true;
+    this.hitCD = true;
+    this.character.hit();
+    this.statusbar.setPercentage(this.character.HP);
+    this.hurt_sound.play();
+    setTimeout(() => {
+      this.hitCD = false;
+    }, 600);
+  }
+
+
+  gotHitByChicken() {
+    this.hitCD = true;
+    this.character.hit();
+    this.statusbar.setPercentage(this.character.HP);
+    this.hurt_sound.play();
+    setTimeout(() => {
+      this.hitCD = false;
+    }, 600);
+  }
+
+
   checkCollisionTop() {
-    const enemiesToRemove = [];
     this.lvl.enemies.forEach((enemie) => {
       this.jumpOnEnemie(enemie);
-      this.deleteEnemieFromMap(enemie, enemiesToRemove);
+      this.deleteChickenFromMap(enemie);
     });
-    this.deleteEnemie(enemiesToRemove);
+    this.deleteEnemie();
   }
 
 
@@ -148,51 +167,61 @@ class World {
   }
 
 
-  deleteEnemieFromMap(enemie, enemiesToRemove) {
-    if ((enemie instanceof Chicken || enemie instanceof ChickenSmall) && enemie.HP === 0 && !enemiesToRemove.includes(enemie)) {
-      enemiesToRemove.push(enemie);
+  deleteChickenFromMap(enemie) {
+    if ((enemie instanceof Chicken || enemie instanceof ChickenSmall) && enemie.HP === 0 && !this.enemiesToRemove.includes(enemie)) {
+      this.enemiesToRemove.push(enemie);
       clearInterval(enemie.walk);
       clearInterval(enemie.walkanimation);
     };
   }
 
 
-  deleteEnemie(enemiesToRemove) {
-    enemiesToRemove.forEach((enemie) => {
+  deleteEnemie() {
+    this.enemiesToRemove.forEach((enemie) => {
+      const delay = enemie instanceof Endboss ? 3000 : 200;
       setTimeout(() => {
         const index = this.lvl.enemies.indexOf(enemie);
         if (index > -1) {
           this.lvl.enemies.splice(index, 1);
         }
-      }, 200);
+      }, delay);
     });
   }
 
 
   checkCollisonEnemieAndBottle() {
-    const enemiesToRemove = [];
-
     this.lvl.enemies.forEach((enemie) => {
-      for (let i = 0; i < this.throwableObject.length; i++) {
-        const bottle = this.throwableObject[i];
-        if (bottle.hit) continue;
-        if (bottle.isColliding(enemie) && enemie instanceof Endboss) {
-          bottle.hit = true;
-          if (enemie.HP > 0 && !enemie.gotHit && enemie.x < 5100) {
-            enemie.gotHit = true;
-            enemie.HP--;
-            this.statusbarBossHP.setPercentage(enemie.HP * 20);
-          }
-          setTimeout(() => {
-            this.throwableObject.splice(i, 1);
-          }, 100);
-          if (enemie.HP === 0 && !enemiesToRemove.includes(enemie)) {
-            enemiesToRemove.push(enemie);
-            clearInterval(enemie.walk);
-            clearInterval(enemie.walkanimation);
-          }
-        } else if (bottle.isColliding(enemie)) {
-          bottle.hit = true;
+      this.handleBottleCollisionEnemie(enemie);
+    });
+    this.deleteEnemie();
+  }
+
+
+  handleBottleCollisionEnemie(enemie) {
+    for (let i = 0; i < this.throwableObject.length; i++) {
+      const bottle = this.throwableObject[i];
+      if (bottle.hit) continue;
+      if (bottle.isColliding(enemie) && enemie instanceof Endboss) {
+        this.bossBottleHit(i, enemie, bottle);
+      } else if (bottle.isColliding(enemie)) {
+        this.chickenBottleHit(i, enemie, bottle);
+        this.deleteChickenFromMap(enemie);
+      }
+    }
+  }
+
+
+  deleteEnemieFromMap(enemie) {
+    if (enemie.HP === 0 && !this.enemiesToRemove.includes(enemie)) {
+    this.enemiesToRemove.push(enemie);
+    clearInterval(enemie.walk);
+    clearInterval(enemie.walkanimation);
+    }
+  }
+
+
+  chickenBottleHit(i, enemie, bottle) {
+    bottle.hit = true;
           if (enemie.HP > 0 && !enemie.gotHit) {
             enemie.gotHit = true;
             enemie.HP--;
@@ -202,27 +231,22 @@ class World {
           setTimeout(() => {
             this.throwableObject.splice(i, 1);
           }, 100);
-
-          if (enemie.HP === 0 && !enemiesToRemove.includes(enemie)) {
-            enemiesToRemove.push(enemie);
-            clearInterval(enemie.walk);
-            clearInterval(enemie.walkanimation);
-          }
-        }
-      }
-    });
-
-    enemiesToRemove.forEach((enemie) => {
-      const delay = enemie instanceof Endboss ? 3000 : 1000;
-
-      setTimeout(() => {
-        const index = this.lvl.enemies.indexOf(enemie);
-        if (index > -1) {
-          this.lvl.enemies.splice(index, 1);
-        }
-      }, delay);
-    });
   }
+
+
+  bossBottleHit(i, enemie ,bottle) {
+    bottle.hit = true;
+          if (enemie.HP > 0 && !enemie.gotHit && enemie.x < 5100) {
+            enemie.gotHit = true;
+            enemie.HP--;
+            this.statusbarBossHP.setPercentage(enemie.HP * 20);
+          }
+          setTimeout(() => {
+            this.throwableObject.splice(i, 1);
+          }, 100);
+          this.deleteEnemieFromMap(enemie);
+  }
+
 
   checkCollisonCoin() {
     const coinsToRemove = [];
@@ -242,18 +266,12 @@ class World {
   checkCollisonBottle() {
     const bottlesToRemove = [];
     this.lvl.bottles.forEach((bottle, index) => {
-      if (
-        this.character.isColliding(bottle) &&
-        this.statusbarBottle.bottle_count < 5
-      ) {
+      if (this.character.isColliding(bottle) && this.statusbarBottle.bottle_count < 5) {
         this.statusbarBottle.bottle_count++;
-        this.statusbarBottle.setPercentage(
-          this.statusbarBottle.bottle_count * 20
-        );
+        this.statusbarBottle.setPercentage(this.statusbarBottle.bottle_count * 20);
         bottlesToRemove.push(index);
       }
     });
-
     bottlesToRemove.reverse().forEach((index) => {
       this.lvl.bottles.splice(index, 1);
     });
@@ -261,16 +279,10 @@ class World {
 
   checkThrowObjects() {
     if (this.keyboard.D && this.statusbarBottle.bottle_count > 0) {
-      let bottle = new ThrowableObject(
-        this.character.x + 50,
-        this.character.y + 100
-      );
+      let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 100);
       this.throwableObject.push(bottle);
       this.statusbarBottle.bottle_count--;
-      this.statusbarBottle.setPercentage(
-        this.statusbarBottle.bottle_count * 20
-      );
-
+      this.statusbarBottle.setPercentage(this.statusbarBottle.bottle_count * 20);
       setInterval(() => {
         this.checkCollisonEnemieAndBottle();
       }, 10);
@@ -279,16 +291,28 @@ class World {
 
   draw() {
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    this.drawWorld();
+    this.drawStatusBars();
+    this.drawCharacterAndBottles();
+    let self = this;
+    requestAnimationFrame(function () {
+      self.draw();
+    });
+  }
 
+
+  drawWorld() {
     this.ctx.translate(this.camera_x, 0);
-
     this.addArrayObjectToMap(this.lvl.backgroundObjects);
     this.addArrayObjectToMap(this.lvl.clouds);
     this.addArrayObjectToMap(this.lvl.enemies);
     this.addArrayObjectToMap(this.lvl.coins);
     this.addArrayObjectToMap(this.lvl.bottles);
-
     this.ctx.translate(-this.camera_x, 0);
+  }
+
+
+  drawStatusBars() {
     this.addToMap(this.statusbar);
     this.addToMap(this.statusbarCoins);
     this.addToMap(this.statusbarBottle);
@@ -296,18 +320,16 @@ class World {
     if(this.showHPBar) {
       this.addToMap(this.statusbarBossHP);
     }
-    this.ctx.translate(this.camera_x, 0);
+  }
 
+
+  drawCharacterAndBottles() {
+    this.ctx.translate(this.camera_x, 0);
     this.addToMap(this.character);
     this.addArrayObjectToMap(this.throwableObject);
-
     this.ctx.translate(-this.camera_x, 0);
-
-    let self = this;
-    requestAnimationFrame(function () {
-      self.draw();
-    });
   }
+
 
   addArrayObjectToMap(ao) {
     ao.forEach((object) => {
