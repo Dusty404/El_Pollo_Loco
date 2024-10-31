@@ -252,24 +252,46 @@ canvas {
 
 
 .controllesWindow {
-
-    background-color: aqua;
-
+    background-color: navajowhite;
+    justify-content: space-around;
     position: absolute;
     top: 35vh;
     display: flex;
     align-items: center;
     flex-direction: column;
-    height: 300px;
-    width: 400px;
+    max-height: 300px;
+    max-width: 480px;
+    width: 100%;
+    height: 100%;
 }
 
 
 .controllePictures {
     display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-around;
 }
 
 
 .controllePictures img {
     height: 50px;
+}
+
+
+.controllesIMG {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    margin: 0;
+    background-color: darkgray;
+}
+
+
+.controllePicturesCollum {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
