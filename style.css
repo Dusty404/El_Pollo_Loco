@@ -21,6 +21,14 @@ body {
 canvas {
     background-color: black;
     display: block;
+    height: 100%;
+    width: 100%;
+}
+
+
+.canvasDiv {
+    max-width: 720px;
+    max-height: 480px;
 }
 
 
@@ -36,18 +44,17 @@ canvas {
 
 .backgroundImage {
     background-image: url('img/9_intro_outro_screens/start/startscreen_2.png');
-    background-size: 720px 480px;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 
 .endgameImg {
-    height: 480px;
-    width: 852px;
+    height: 100%;
+    width: 100%;
     position: relative;
     bottom: 480px;
-    right: 55px;
 }
 
 
@@ -87,13 +94,12 @@ canvas {
 
 
 .startGameButton {
-    background-color: coral;
+    background-color: #FF9B00;
     width: 120px;
     height: 50px;
     align-self: center;
-    position: fixed;
-    top: 57vh;
     border-radius: 16px;
+    margin: 16px;
 }
 
 
@@ -153,67 +159,9 @@ canvas {
 }
 
 
-@media only screen and (max-width: 935px) {
-    .mobileControlles {
-        display: flex;
-    }
-}
-
-
-@media only screen and (max-width: 720px) {
-
-    .menuOverlay {
-        width: 100vw;
-    }
-
-
-    .backgroundImage {
-        background-size: 100vw 480px;
-    }
-}
-
-
-@media only screen and (max-height: 560px) {
-    body h1 {
-        display: none;
-    }
-
-
-    .startGameButton {
-        top: 50vh;
-    }
-}
-
-
-@media only screen and (max-height: 480px) {
-    canvas {
-        height: 100vh;
-    }
-
-    .menuOverlay {
-        height: 100vh;
-        position: absolute;
-        top: 0;
-        justify-content: space-between;
-    }
-
-
-    .backgroundImage {
-        background-size: 720px 100vh;
-    }
-}
-
-
-@media only screen and (max-height: 480px) and (max-width: 720px) {
-    .backgroundImage {
-        background-size: 100vw 100vh;
-    }
-
-
-    .menuOverlay {
-        height: 100vh;
-        width: 100vw;
-    }
+.border {
+    border: solid 5px #FF9B00;
+    border-radius: 5px;
 }
 
 
@@ -245,14 +193,8 @@ canvas {
 }
 
 
-.border {
-    border: solid 5px #FF9B00;
-    border-radius: 5px;
-}
-
-
 .controllesWindow {
-    background-color: navajowhite;
+    background-color: #FF9B00;
     justify-content: space-around;
     position: absolute;
     top: 35vh;
@@ -294,4 +236,116 @@ canvas {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+
+.rotateDeviceContainer {
+    display: none;
+}
+
+
+.rotateDeviceContainer img {
+    height: 50vh;
+    width: 50vw;
+}
+
+
+.playGameButtons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.buttonPositionFix {
+    position: relative;
+    bottom: 85px;
+}
+
+
+@media only screen and (max-width: 935px) {
+    .mobileControlles {
+        display: flex;
+    }
+}
+
+
+@media only screen and (max-width: 730px) {
+
+    .menuOverlay {
+        width: 100vw;
+    }
+
+
+    .border {
+        border: 0;
+        border-top: solid 5px #FF9B00;
+        border-bottom: solid 5px #FF9B00;
+        border-radius: 0;
+    }
+}
+
+
+@media only screen and (max-height: 560px) {
+    body h1 {
+        display: none;
+    }
+
+
+    .startGameButton {
+        top: 50vh;
+    }
+}
+
+
+@media only screen and (max-height: 490px) {
+    canvas {
+        height: 100vh;
+    }
+
+    .menuOverlay {
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        justify-content: space-between;
+    }
+
+
+    .border {
+        border: 0;
+        border-left: solid 5px #FF9B00;
+        border-right: solid 5px #FF9B00;
+        border-radius: 0;
+    }
+}
+
+
+@media only screen and (max-height: 490px) and (max-width: 730px) {
+    .menuOverlay {
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .border {
+        border: 0;
+        border-top: 0;
+        border-bottom: 0;
+        border-left: 0;
+        border-right: 0;
+    }
+}
+
+
+@media only screen and (max-width: 550px) {
+    .rotateDeviceContainer {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 100vh;
+        background-color: #FF9B00;
+        z-index: 999;
+    }
 }

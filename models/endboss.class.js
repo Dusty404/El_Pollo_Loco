@@ -140,6 +140,7 @@ class Endboss extends MoveableObject {
                 clearInterval(this.Deathcheckint);
                 setTimeout(() => {
                     this.winGame();
+                    this.playAgain();
                     this.stopGame();
                 }, 3000);
             }
@@ -271,6 +272,7 @@ class Endboss extends MoveableObject {
         document.getElementById('endgameImg').src = 'img/9_intro_outro_screens/win/won_2.png';
         document.getElementById('endgameImg').classList.remove('d-none');
         document.getElementById('mobileControlles').classList.add('d-none');
+        document.getElementById('home').classList.remove('d-none');
     }
 
 }

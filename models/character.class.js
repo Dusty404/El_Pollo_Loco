@@ -180,7 +180,7 @@ class Character extends MoveableObject {
     setTimeout(() => {
       this.world.stopGame();
       this.showEndscreen();
-      this.tryAgain();
+      this.playAgain();
     }, 1000);
   }
 
@@ -243,8 +243,8 @@ class Character extends MoveableObject {
   }
 
 
-  tryAgain() {
-    document.getElementById('startGame').innerHTML = 'Try Again?';
-    document.getElementById('startGame').classList.remove('d-none');
+  playAgain() {
+    document.getElementById('tryAgain').classList.remove('d-none');
+    document.getElementById('home').classList.remove('d-none');
   }
 }

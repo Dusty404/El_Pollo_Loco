@@ -364,4 +364,9 @@ class World {
     object.x = object.x * -1;
     this.ctx.restore();
   }
+
+
+  playAgain() {
+    document.getElementById('tryAgain').classList.remove('d-none');
+  }
 }

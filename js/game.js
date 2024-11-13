@@ -12,6 +12,18 @@ function init() {
     mobileControlls();
     showgame();
     document.getElementById('endgameImg').classList.add('d-none');
+    document.getElementById('tryAgain').classList.add('d-none');
+    document.getElementById('playGameButtons').classList.add('buttonPositionFix');
+}
+
+
+function home() {
+    document.getElementById('playGameButtons').classList.remove('buttonPositionFix');
+    document.getElementById('canvas').classList.add('d-none');
+    document.getElementById('menuOverlay').classList.add('backgroundImage');
+    document.getElementById('home').classList.add('d-none');
+    document.getElementById('startGame').classList.remove('d-none');
+    document.getElementById('tryAgain').classList.add('d-none');
 }
 
 

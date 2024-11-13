@@ -37,11 +37,15 @@
     <script src="js/game.js"></script>
   </head>
   <body>
+    <div class="rotateDeviceContainer">
+      <img src="./img/flip-screen.svg">
+      <h1>Pls rotate your Device</h1>
+    </div>
     <h1 id="header">El Pollo Loco</h1>
 
    
     <div id="menuOverlay" class="menuOverlay backgroundImage border">
-      <div id="canvasDiv">
+      <div id="canvasDiv" class="canvasDiv">
         <canvas id="canvas" class="d-none" width="720" height="480"></canvas>
         <img id="endgameImg" class="endgameImg d-none" src="img/9_intro_outro_screens/game_over/game over.png">
       </div>
@@ -51,9 +55,17 @@
         <button id="muteMusic" class="optionButton" onclick="muteMusic()"><img id="musicImg" src="img/optionButtons/music-solid.svg"></button>
         <button id="fullscreen" class="optionButton" onclick="fullscreenOption()"><img id="fsImg" src="img/optionButtons/expand-solid.svg"></button>
       </div>
-      <button id="startGame" onclick="init()" class="startGameButton">
+      <div id="playGameButtons" class="playGameButtons">
+        <button id="startGame" onclick="init()" class="startGameButton">
         Start Game
       </button>
+      <button id="tryAgain" onclick="init()" class="startGameButton d-none">
+        Play again?
+      </button>
+      <button id="home" onclick="home()" class="startGameButton d-none">
+        Home
+      </button>
+      </div>      
       <div id="mobileControlles" class="mobileControlles d-none">
         <div class="buttons">
         <butto id="mobileRunLeft" class="mobileControlleButton runLeft"></butto>
