@@ -1,9 +1,11 @@
 let bgMusic = new Audio('audio/backgroundMusic.mp3');
+let win_game_sound = new Audio("audio/victory_sound.mp3")
 let soundsArr = [];
 let musicArr = [bgMusic];
 let soundMute = false;
 let musicMute = false;
 bgMusic.loop = true;
+win_game_sound.volume = 0.2;
 
 function muteSounds() {
     if (soundMute === false) {
@@ -25,10 +27,12 @@ function muteSounds() {
 function muteMusic() {
     if (musicMute === false) {
         bgMusic.muted = true;
-        musicMute = true;
+        win_game_sound.mute = true;
+        musicMute = true;        
         document.getElementById('musicImg').src ='img/optionButtons/xmark-solid.svg';
     } else if (musicMute === true) {
         bgMusic.muted = false;
+        win_game_sound.mute = false;
         musicMute = false;
         document.getElementById('musicImg').src ='img/optionButtons/music-solid.svg';
     }

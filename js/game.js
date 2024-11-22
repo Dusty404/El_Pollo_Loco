@@ -14,6 +14,8 @@ function init() {
     document.getElementById('endgameImg').classList.add('d-none');
     document.getElementById('tryAgain').classList.add('d-none');
     document.getElementById('playGameButtons').classList.add('buttonPositionFix');
+    document.getElementById('menuOverlay').classList.remove('border');
+    document.getElementById('canvasDiv').classList.add('border');
 }
 
 
@@ -24,6 +26,9 @@ function home() {
     document.getElementById('home').classList.add('d-none');
     document.getElementById('startGame').classList.remove('d-none');
     document.getElementById('tryAgain').classList.add('d-none');
+    document.getElementById('endgameImg').classList.add('d-none');
+    document.getElementById('menuOverlay').classList.add('border');
+    document.getElementById('canvasDiv').classList.remove('border');
 }
 
 
@@ -127,6 +132,7 @@ function mobileControlls() {
 function showgame() {
     let overlay = document.getElementById('menuOverlay');
     let startButton = document.getElementById('startGame');
+    let homeButton = document.getElementById('home');
     let canvas = document.getElementById('canvas');
     let controlls = document.getElementById('mobileControlles');
     let menu = document.getElementById('optionButtonsRow');
@@ -134,6 +140,7 @@ function showgame() {
     overlay.classList.remove('backgroundImage');
     menu.classList.add('menuInGame');
     startButton.classList.add('d-none');
+    homeButton.classList.add('d-none');
     controlls.classList.remove('d-none');
 }
 

@@ -21,6 +21,7 @@ class Endboss extends MoveableObject {
     firstMeetAnimationInt;
     bossalerte;
     bossAnimationStart = false;
+    boss_death_sound = new Audio("audio/boss_death_sound.mp3");
 
 
     offset = {
@@ -140,8 +141,8 @@ class Endboss extends MoveableObject {
                 clearInterval(this.Deathcheckint);
                 setTimeout(() => {
                     this.winGame();
-                    this.playAgain();
-                    this.stopGame();
+                    bgMusic.pause();
+                    win_game_sound.play();
                 }, 3000);
             }
         }, 10);
@@ -154,6 +155,7 @@ class Endboss extends MoveableObject {
             clearInterval(this.hurt);
             clearInterval(this.attackInt);
             clearInterval(this.bossDeath);
+            this.boss_death_sound.play();
             this.bossDeath = setInterval(() => {
                 this.playAnimation(this.hurt_animation_Images);
             }, 100);

@@ -21,7 +21,11 @@ class World {
   walking_sound = new Audio("audio/walking.mp3");
   hurt_sound = new Audio("audio/hurt.mp3");
   jump_sound = new Audio("audio/jump.mp3");
-  
+  gameOver_sound = new Audio("audio/dead.mp3");
+  chicken_death_sound = new Audio("audio/chicken_death_sound.mp3");
+  Small_chicken_death_sound = new Audio("audio/small_chicken_death_sound.mp3");
+  bottle_shatter_sound = new Audio("audio/bottle_shatter_sound.mp3");
+  afk_sound = new Audio("audio/Sleeping.mp3");
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -42,7 +46,8 @@ class World {
 
 
   pushSounds() {
-    this.sounds.push(this.walking_sound, this.hurt_sound, this.jump_sound);
+    this.sounds.push(this.walking_sound, this.hurt_sound, this.jump_sound, this.gameOver_sound, 
+      this.chicken_death_sound, this.Small_chicken_death_sound, this.bottle_shatter_sound);
   }
 
 
@@ -117,28 +122,17 @@ class World {
   checkCollisonEnemie() {
     this.lvl.enemies.forEach((enemie) => {
       if (this.character.isColliding(enemie) && this.character.HP > 0 && enemie instanceof Endboss && !this.hitCD) {
-        this.gotHitByBoss(enemie);
+        enemie.attack = true;
+        this.gotHitByEnemie(enemie);
       } else if (this.character.isColliding(enemie) && this.character.HP > 0 && enemie.HP > 0 &&
                 !this.hitCD && !this.character.isCollidingTop(enemie)) {
-        this.gotHitByChicken(enemie);
+        this.gotHitByEnemie();
       }
     });
   }
 
 
-  gotHitByBoss(enemie) {
-    enemie.attack = true;
-    this.hitCD = true;
-    this.character.hit();
-    this.statusbar.setPercentage(this.character.HP);
-    this.hurt_sound.play();
-    setTimeout(() => {
-      this.hitCD = false;
-    }, 600);
-  }
-
-
-  gotHitByChicken() {
+  gotHitByEnemie() {
     this.hitCD = true;
     this.character.hit();
     this.statusbar.setPercentage(this.character.HP);
@@ -161,6 +155,7 @@ class World {
   jumpOnEnemie(enemie) {
     if (this.character.isCollidingTop(enemie) && this.character.HP > 0 && this.character.speedY < 0) {
       enemie.HP--;
+      this.playDeathSound(enemie);
       this.character.speedY = 20;
       this.character.jumpAnimation();
     };
@@ -203,9 +198,18 @@ class World {
       if (bottle.hit) continue;
       if (bottle.isColliding(enemie) && enemie instanceof Endboss) {
         this.bossBottleHit(i, enemie, bottle);
+        this.bottle_shatter_sound.play();
       } else if (bottle.isColliding(enemie)) {
+        this.playDeathSound(enemie);
         this.chickenBottleHit(i, enemie, bottle);
         this.deleteChickenFromMap(enemie);
+        this.bottle_shatter_sound.play();
+      } else if (bottle.y > 400) {
+        bottle.hit = true;
+        this.bottle_shatter_sound.play();
+        setTimeout(() => {
+          this.throwableObject.splice(i, 1);
+        }, 100);
       }
     }
   }
@@ -222,29 +226,35 @@ class World {
 
   chickenBottleHit(i, enemie, bottle) {
     bottle.hit = true;
-          if (enemie.HP > 0 && !enemie.gotHit) {
-            enemie.gotHit = true;
-            enemie.HP--;
-          } else if (enemie.HP > 0) {
-            enemie.HP--;
-          }
-          setTimeout(() => {
-            this.throwableObject.splice(i, 1);
-          }, 100);
+    if (enemie.HP > 0 && !enemie.gotHit) {
+      enemie.gotHit = true;
+      enemie.HP--;
+    } else if (enemie.HP > 0) {
+      enemie.HP--;
+    }
+    setTimeout(() => {
+      this.throwableObject.splice(i, 1);
+    }, 100);
   }
 
 
   bossBottleHit(i, enemie ,bottle) {
     bottle.hit = true;
-          if (enemie.HP > 0 && !enemie.gotHit && enemie.x < 5100) {
-            enemie.gotHit = true;
-            enemie.HP--;
-            this.statusbarBossHP.setPercentage(enemie.HP * 20);
-          }
-          setTimeout(() => {
-            this.throwableObject.splice(i, 1);
-          }, 100);
-          this.deleteEnemieFromMap(enemie);
+    if (enemie.HP > 0 && !enemie.gotHit && enemie.x < 5100) {
+      enemie.gotHit = true;
+      enemie.HP--;
+      this.chicken_death_sound.play();
+      this.statusbarBossHP.setPercentage(enemie.HP * 20);
+      if(enemie.HP == 0) {
+        setTimeout(() => {
+          this.stopGame();
+        }, 2800);
+      }
+    }
+    setTimeout(() => {
+      this.throwableObject.splice(i, 1);
+    }, 100);
+    this.deleteEnemieFromMap(enemie);
   }
 
 
@@ -257,7 +267,6 @@ class World {
         coinsToRemove.push(index);
       }
     });
-
     coinsToRemove.reverse().forEach((index) => {
       this.lvl.coins.splice(index, 1);
     });
@@ -288,6 +297,16 @@ class World {
       }, 10);
     }
   }
+
+
+  playDeathSound(enemie) {
+    if (enemie instanceof Chicken) {
+      this.chicken_death_sound.play();
+    } else if (enemie instanceof ChickenSmall) {
+      this.Small_chicken_death_sound.play();
+    };
+  }
+
 
   draw() {
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);

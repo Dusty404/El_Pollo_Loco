@@ -27,7 +27,7 @@ canvas {
 
 
 .canvasDiv {
-    max-width: 720px;
+    max-width: 730px;
     max-height: 480px;
 }
 
@@ -38,7 +38,6 @@ canvas {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    overflow: hidden;
 }
 
 
@@ -316,6 +315,15 @@ canvas {
         border-left: solid 5px #FF9B00;
         border-right: solid 5px #FF9B00;
         border-radius: 0;
+    }
+
+
+    .endgameImg {
+        height: 100vh;
+        top: 0;
+        left: 0;
+        background-size: 100vw 100vh;
+        position: absolute;
     }
 }
 

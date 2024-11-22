@@ -152,6 +152,7 @@ class Character extends MoveableObject {
         this.isMoving = false;
       } else if (this.lazy && !this.alreadyLazy) {
         this.lazyAniamtion();
+        this.world.afk_sound.play();
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.setFalse();
         this.isMoving = true;
@@ -165,23 +166,32 @@ class Character extends MoveableObject {
   }
 
   deadAnimation() {
+    this.handleSoundAndMusic();
+    clearInterval(this.movementInt);
+    clearInterval(this.jumpInt);
+    this.deathAnimation();
+    setTimeout(() => {
+      this.world.stopGame();
+      this.showEndscreen();
+      this.playAgain();
+      this.world.gameOver_sound.play();
+    }, 1000);
+  }
+
+  handleSoundAndMusic() {
     soundsArr.forEach(sound => {
       sound.pause();
     });
     bgMusic.pause();
     bgMusic.currentTime = 0;
-    clearInterval(this.movementInt);
-    clearInterval(this.jumpInt);
+  }
+
+  deathAnimation() {
     this.speedY = 20;
     this.dead = setInterval(() => {
       this.playAnimation(this.dead_animation);
       this.x -= 10;
     }, 142.85);
-    setTimeout(() => {
-      this.world.stopGame();
-      this.showEndscreen();
-      this.playAgain();
-    }, 1000);
   }
 
   jumpAnimation() {
@@ -234,12 +244,16 @@ class Character extends MoveableObject {
     clearInterval(this.idlInt);
     clearInterval(this.lazyInt);
     clearTimeout(this.lazyTimeout);
+    this.world.afk_sound.pause();
+    this.world.afk_sound.currentTime = 0;
   }
 
   
   showEndscreen() {
     document.getElementById('endgameImg').classList.remove('d-none');
     document.getElementById('mobileControlles').classList.add('d-none');
+    document.getElementById('menuOverlay').classList.add('border');
+    document.getElementById('canvasDiv').classList.remove('border');
   }
 
 
