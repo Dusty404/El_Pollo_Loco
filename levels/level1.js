@@ -20,7 +20,17 @@ function startLvl() {
       new ChickenSmall(),
       new Endboss(),
     ],
-    [new Cloud()],
+    [ 
+      new Cloud(0),
+      new Cloud(719),
+      new Cloud(719 * 2),
+      new Cloud(719 * 3),
+      new Cloud(719 * 4),
+      new Cloud(719 * 5),
+      new Cloud(719 * 6),
+      new Cloud(719 * 7),
+      new Cloud(719 * 8)
+    ],
     [
       new Backgroundobject("img/5_background/layers/air.png", -719 * 2),
       new Backgroundobject(

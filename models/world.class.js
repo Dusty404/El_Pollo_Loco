@@ -18,15 +18,6 @@ class World {
   hitCD = false;
 
 
-  walking_sound = new Audio("audio/walking.mp3");
-  hurt_sound = new Audio("audio/hurt.mp3");
-  jump_sound = new Audio("audio/jump.mp3");
-  gameOver_sound = new Audio("audio/dead.mp3");
-  chicken_death_sound = new Audio("audio/chicken_death_sound.mp3");
-  Small_chicken_death_sound = new Audio("audio/small_chicken_death_sound.mp3");
-  bottle_shatter_sound = new Audio("audio/bottle_shatter_sound.mp3");
-  afk_sound = new Audio("audio/Sleeping.mp3");
-
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
@@ -34,7 +25,6 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
-    this.pushSounds();
     this.playBackgroundMusic();
   }
 
@@ -45,19 +35,8 @@ class World {
   }
 
 
-  pushSounds() {
-    this.sounds.push(this.walking_sound, this.hurt_sound, this.jump_sound, this.gameOver_sound, 
-      this.chicken_death_sound, this.Small_chicken_death_sound, this.bottle_shatter_sound);
-  }
-
-
   playBackgroundMusic() {
     this.backgroundMusic.play();
-  }
-
-
-  stopGame() {
-    for (let i = 1; i < 9999; i++) window.clearInterval(i);
   }
 
 
@@ -136,7 +115,7 @@ class World {
     this.hitCD = true;
     this.character.hit();
     this.statusbar.setPercentage(this.character.HP);
-    this.hurt_sound.play();
+    hurt_sound.play();
     setTimeout(() => {
       this.hitCD = false;
     }, 600);
@@ -198,15 +177,15 @@ class World {
       if (bottle.hit) continue;
       if (bottle.isColliding(enemie) && enemie instanceof Endboss) {
         this.bossBottleHit(i, enemie, bottle);
-        this.bottle_shatter_sound.play();
+        bottle_shatter_sound.play();
       } else if (bottle.isColliding(enemie)) {
         this.playDeathSound(enemie);
         this.chickenBottleHit(i, enemie, bottle);
         this.deleteChickenFromMap(enemie);
-        this.bottle_shatter_sound.play();
+        bottle_shatter_sound.play();
       } else if (bottle.y > 400) {
         bottle.hit = true;
-        this.bottle_shatter_sound.play();
+        bottle_shatter_sound.play();
         setTimeout(() => {
           this.throwableObject.splice(i, 1);
         }, 100);
@@ -243,13 +222,8 @@ class World {
     if (enemie.HP > 0 && !enemie.gotHit && enemie.x < 5100) {
       enemie.gotHit = true;
       enemie.HP--;
-      this.chicken_death_sound.play();
+      chicken_death_sound.play();
       this.statusbarBossHP.setPercentage(enemie.HP * 20);
-      if(enemie.HP == 0) {
-        setTimeout(() => {
-          this.stopGame();
-        }, 2800);
-      }
     }
     setTimeout(() => {
       this.throwableObject.splice(i, 1);
@@ -262,6 +236,7 @@ class World {
     const coinsToRemove = [];
     this.lvl.coins.forEach((coin, index) => {
       if (this.character.isColliding(coin) && this.statusbarCoins.coins < 5) {
+        coin_collect_sound.play();
         this.statusbarCoins.coins++;
         this.statusbarCoins.setPercentage(this.statusbarCoins.coins * 20);
         coinsToRemove.push(index);
@@ -276,6 +251,7 @@ class World {
     const bottlesToRemove = [];
     this.lvl.bottles.forEach((bottle, index) => {
       if (this.character.isColliding(bottle) && this.statusbarBottle.bottle_count < 5) {
+        bottle_collect_sound.play();
         this.statusbarBottle.bottle_count++;
         this.statusbarBottle.setPercentage(this.statusbarBottle.bottle_count * 20);
         bottlesToRemove.push(index);
@@ -301,9 +277,9 @@ class World {
 
   playDeathSound(enemie) {
     if (enemie instanceof Chicken) {
-      this.chicken_death_sound.play();
+      chicken_death_sound.play();
     } else if (enemie instanceof ChickenSmall) {
-      this.Small_chicken_death_sound.play();
+      Small_chicken_death_sound.play();
     };
   }
 

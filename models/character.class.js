@@ -128,8 +128,8 @@ class Character extends MoveableObject {
 
   animateJump() {
     if (this.world.keyboard.SPACE && !this.isAboveGround() && this.HP > 0) {
-      this.world.walking_sound.pause();
-      this.world.jump_sound.play();
+      walking_sound.pause();
+      jump_sound.play();
       this.jump();
     }
   }
@@ -144,7 +144,7 @@ class Character extends MoveableObject {
         this.setFalse();
         this.playAnimation(this.hurt_Animation_Images);
       } else if (this.isAboveGround()) {
-        this.world.walking_sound.pause();
+        walking_sound.pause();
         this.setFalse();
         this.jumpAnimation();
       } else if (!this.world.keyboard.LEFT && !this.world.keyboard.RIGHT && this.HP > 0 && !this.alreadyIdl) {
@@ -152,39 +152,32 @@ class Character extends MoveableObject {
         this.isMoving = false;
       } else if (this.lazy && !this.alreadyLazy) {
         this.lazyAniamtion();
-        this.world.afk_sound.play();
+        afk_sound.play();
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.setFalse();
         this.isMoving = true;
         this.playAnimation(this.walk_animation_Images);
-        this.world.walking_sound.play();
+        walking_sound.play();
       }
       if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
-        this.world.walking_sound.pause();
+        walking_sound.pause();
       }
     }, 50);
   }
 
   deadAnimation() {
-    this.handleSoundAndMusic();
+    handleSoundAndMusic();
     clearInterval(this.movementInt);
     clearInterval(this.jumpInt);
     this.deathAnimation();
     setTimeout(() => {
-      this.world.stopGame();
+      stopGame();
       this.showEndscreen();
       this.playAgain();
-      this.world.gameOver_sound.play();
+      gameOver_sound.play();
     }, 1000);
   }
 
-  handleSoundAndMusic() {
-    soundsArr.forEach(sound => {
-      sound.pause();
-    });
-    bgMusic.pause();
-    bgMusic.currentTime = 0;
-  }
 
   deathAnimation() {
     this.speedY = 20;
@@ -244,16 +237,15 @@ class Character extends MoveableObject {
     clearInterval(this.idlInt);
     clearInterval(this.lazyInt);
     clearTimeout(this.lazyTimeout);
-    this.world.afk_sound.pause();
-    this.world.afk_sound.currentTime = 0;
+    afk_sound.pause();
+    afk_sound.currentTime = 0;
   }
 
   
   showEndscreen() {
+    document.getElementById('endgameImg').src = 'img/9_intro_outro_screens/game_over/game over.png';
     document.getElementById('endgameImg').classList.remove('d-none');
     document.getElementById('mobileControlles').classList.add('d-none');
-    document.getElementById('menuOverlay').classList.add('border');
-    document.getElementById('canvasDiv').classList.remove('border');
   }
 
 

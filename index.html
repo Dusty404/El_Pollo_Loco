@@ -23,6 +23,7 @@
     <script src="models/chickenSmall.class.js"></script>
     <script src="models/character.class.js"></script>
     <script src="models/cloud.class.js"></script>
+    <script src="js/damage_handle.js"></script>
     <script src="models/world.class.js"></script>
     <script src="models/background.class.js"></script>
     <script src="models/keyboard.class.js"></script>
@@ -38,74 +39,97 @@
   </head>
   <body>
     <div class="rotateDeviceContainer">
-      <img src="./img/flip-screen.svg">
+      <img src="./img/flip-screen.svg" />
       <h1>Pls rotate your Device</h1>
     </div>
     <h1 id="header">El Pollo Loco</h1>
 
-   
-    <div id="menuOverlay" class="menuOverlay backgroundImage border">
-      <div id="canvasDiv" class="canvasDiv">
-        <canvas id="canvas" class="d-none" width="720" height="480"></canvas>
-        <img id="endgameImg" class="endgameImg d-none" src="img/9_intro_outro_screens/game_over/game over.png">
-      </div>
+    <div id="menuOverlay" class="menuOverlay backgroundImage">
+      <canvas id="canvas" class="d-none" width="720" height="480"></canvas>
+      <img
+        id="endgameImg"
+        class="endgameImg d-none"
+        src="img/9_intro_outro_screens/game_over/game over.png"
+      />
       <div id="optionButtonsRow" class="optionButtonsRow">
-        <button id="controlles" class="optionButton" onclick="showControlles()"><img id="controllesImg" src="img/optionButtons/gamepad-solid.svg"></button>
-        <button id="muteSound" class="optionButton" onclick="muteSounds()"><img id="soundImg" src="img/optionButtons/volume-high-solid.svg"></button>
-        <button id="muteMusic" class="optionButton" onclick="muteMusic()"><img id="musicImg" src="img/optionButtons/music-solid.svg"></button>
-        <button id="fullscreen" class="optionButton" onclick="fullscreenOption()"><img id="fsImg" src="img/optionButtons/expand-solid.svg"></button>
+        <button id="controlles" class="optionButton" onclick="showControlles()">
+          <img id="controllesImg" src="img/optionButtons/gamepad-solid.svg" />
+        </button>
+        <button id="muteSound" class="optionButton" onclick="muteSounds()">
+          <img id="soundImg" src="img/optionButtons/volume-high-solid.svg" />
+        </button>
+        <button id="muteMusic" class="optionButton" onclick="muteMusic()">
+          <img id="musicImg" src="img/optionButtons/music-solid.svg" />
+        </button>
+        <button id="fullscreen" class="optionButton" onclick="fullscreenOn()">
+          <img id="fsImg" src="img/optionButtons/expand-solid.svg" />
+        </button>
       </div>
       <div id="playGameButtons" class="playGameButtons">
         <button id="startGame" onclick="init()" class="startGameButton">
-        Start Game
-      </button>
-      <button id="tryAgain" onclick="init()" class="startGameButton d-none">
-        Play again?
-      </button>
-      <button id="home" onclick="home()" class="startGameButton d-none">
-        Home
-      </button>
-      </div>      
+          Start Game
+        </button>
+        <button id="tryAgain" onclick="init()" class="startGameButton d-none">
+          Play again?
+        </button>
+        <button id="home" onclick="home()" class="startGameButton d-none">
+          Home
+        </button>
+      </div>
       <div id="mobileControlles" class="mobileControlles d-none">
-        <div class="buttons">
-        <butto id="mobileRunLeft" class="mobileControlleButton runLeft"></butto>
-        <butto
-          id="mobileRunRigth"
-          class="mobileControlleButton runRight"
-        ></butto>
+        <div class="mobileControllesPositionContainer">
+          <div class="buttons">
+            <butto
+              id="mobileRunLeft"
+              class="mobileControlleButton runLeft"
+            ></butto>
+            <butto
+              id="mobileRunRigth"
+              class="mobileControlleButton runRight"
+            ></butto>
+          </div>
+          <div class="buttons">
+            <button
+              id="mobileJump"
+              class="mobileControlleButton jumpButton"
+            ></button>
+            <button
+              id="mobileThrowBottle"
+              class="mobileControlleButton throwBottleButton"
+            ></button>
+          </div>
         </div>
-        <div class="buttons">
-        <button
-          id="mobileJump"
-          class="mobileControlleButton jumpButton"
-        ></button>
-        <button
-          id="mobileThrowBottle"
-          class="mobileControlleButton throwBottleButton"
-        ></button>
+      </div>
+      <div id="controllesWindow" class="controllesWindow border d-none">
+        <h1>Controlles</h1>
+        <div class="controllePictures">
+          <div class="controllePicturesCollum">
+            <img
+              class="border controllesIMG"
+              src="img/optionButtons/arrow-left-solid.svg"
+              alt=""
+            />
+            <p>Move Left</p>
+          </div>
+          <div class="controllePicturesCollum">
+            <img
+              class="border controllesIMG"
+              src="img/optionButtons/arrow-right-solid.svg"
+              alt=""
+            />
+            <p>Move Rigth</p>
+          </div>
+          <div class="controllePicturesCollum">
+            <h2 class="border controllesIMG">D</h2>
+            <p>Throw Bottle</p>
+          </div>
+          <div class="controllePicturesCollum">
+            <h2 class="border controllesIMG">SPACE</h2>
+            <p style="align-self: center">Jump</p>
+          </div>
         </div>
       </div>
     </div>
-    <div id="controllesWindow" class="controllesWindow border d-none">
-      <h1>Controlles</h1>
-      <div class="controllePictures">
-        <div class="controllePicturesCollum">
-        <img class="border controllesIMG" src="img/optionButtons/arrow-left-solid.svg" alt="">
-        <p>Move Left</p>
-        </div>
-        <div class="controllePicturesCollum">
-        <img class="border controllesIMG" src="img/optionButtons/arrow-right-solid.svg" alt="">
-        <p>Move Rigth</p>
-        </div>
-        <div class="controllePicturesCollum">
-        <h2 class="border controllesIMG">D</h2>
-        <p>Throw Bottle</p>
-        </div>
-        <div class="controllePicturesCollum">
-        <h2 class="border controllesIMG">SPACE</h2>
-        <p style="align-self: center;">Jump</p>
-        </div>
-      </div>
-    </div>
+   
   </body>
 </html>

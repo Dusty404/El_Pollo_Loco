@@ -36,6 +36,7 @@ canvas {
     width: 720px;
     height: 480px;
     display: flex;
+    position: relative;
     flex-direction: column;
     justify-content: space-between;
 }
@@ -52,8 +53,7 @@ canvas {
 .endgameImg {
     height: 100%;
     width: 100%;
-    position: relative;
-    bottom: 480px;
+    position: absolute;
 }
 
 
@@ -105,8 +105,17 @@ canvas {
 .mobileControlles {
     display: none;
     justify-content: space-between;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+
+.mobileControllesPositionContainer {
+    display: flex;
     position: relative;
-    bottom: 100px;
+    justify-content: space-between;
+    width: 100%;
 }
 
 
@@ -194,9 +203,12 @@ canvas {
 
 .controllesWindow {
     background-color: #FF9B00;
+    border: solid 2px black;
     justify-content: space-around;
     position: absolute;
-    top: 35vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -253,12 +265,10 @@ canvas {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-
-.buttonPositionFix {
-    position: relative;
-    bottom: 85px;
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translate(-50%, 0);
 }
 
 
