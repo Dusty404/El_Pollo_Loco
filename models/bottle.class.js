@@ -1,4 +1,4 @@
-class Bottle extends CollectableObject {
+class Bottle extends DrawableObject {
 
     imageNr;
 

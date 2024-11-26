@@ -179,18 +179,28 @@ class World {
         this.bossBottleHit(i, enemie, bottle);
         bottle_shatter_sound.play();
       } else if (bottle.isColliding(enemie)) {
-        this.playDeathSound(enemie);
-        this.chickenBottleHit(i, enemie, bottle);
-        this.deleteChickenFromMap(enemie);
-        bottle_shatter_sound.play();
+        this.bottleHitEnemie(i, enemie, bottle);
       } else if (bottle.y > 400) {
-        bottle.hit = true;
-        bottle_shatter_sound.play();
-        setTimeout(() => {
-          this.throwableObject.splice(i, 1);
-        }, 100);
+        this.bottleHitGround(i, bottle);
       }
     }
+  }
+
+
+  bottleHitEnemie(i, enemie, bottle) {
+    this.playDeathSound(enemie);
+    this.chickenBottleHit(i, enemie, bottle);
+    this.deleteChickenFromMap(enemie);
+    bottle_shatter_sound.play();
+  }
+
+
+  bottleHitGround(i, bottle) {
+    bottle.hit = true;
+    bottle_shatter_sound.play();
+    setTimeout(() => {
+    this.throwableObject.splice(i, 1);
+    }, 100);
   }
 
 

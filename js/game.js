@@ -4,6 +4,8 @@ let keyboard = new Keyboard();
 let fullscreen = false;
 
 function init() {
+  gameOver_sound.pause();
+  gameOver_sound.currentTime = 0;
   startLvl();
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
@@ -15,6 +17,8 @@ function init() {
 
 
 function home() {
+  gameOver_sound.pause();
+  gameOver_sound.currentTime = 0;
   document.getElementById("canvas").classList.add("d-none");
   document.getElementById("menuOverlay").classList.add("backgroundImage");
   document.getElementById("home").classList.add("d-none");

@@ -77,9 +77,6 @@ class Character extends MoveableObject {
     "img/2_character_pepe/1_idle/long_idle/I-20.png",
   ];
   world;
-  
-
-
 
   constructor() {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png");
@@ -93,12 +90,9 @@ class Character extends MoveableObject {
     this.applyGravity();
   }
 
-
   stopGame() {
     for (let i = 1; i < 9999; i++) window.clearInterval(i);
   }
-
-
 
   animation() {
     setInterval(() => {
@@ -108,15 +102,18 @@ class Character extends MoveableObject {
       this.animateJump();
     }, 1000 / 60);
     this.movement();
+    this.pauseWalkingSoundCheck()
   }
 
-
   animateGoRight() {
-    if (this.world.keyboard.RIGHT && this.x < this.world.lvl.level_end_x && this.HP > 0) {
+    if (
+      this.world.keyboard.RIGHT &&
+      this.x < this.world.lvl.level_end_x &&
+      this.HP > 0
+    ) {
       this.moveRight();
     }
   }
-
 
   animateGoLeft() {
     if (this.world.keyboard.LEFT && this.x > 0 && this.HP > 0) {
@@ -124,7 +121,6 @@ class Character extends MoveableObject {
       this.otherDirection = true;
     }
   }
-
 
   animateJump() {
     if (this.world.keyboard.SPACE && !this.isAboveGround() && this.HP > 0) {
@@ -134,35 +130,63 @@ class Character extends MoveableObject {
     }
   }
 
-
   movement() {
     this.movementInt = setInterval(() => {
       if (this.isDead()) {
-        this.setFalse();
-        this.deadAnimation();
+        this.playDeadAnimation();
       } else if (this.isHurt() && this.HP > 1) {
-        this.setFalse();
-        this.playAnimation(this.hurt_Animation_Images);
+        this.playHurtAnimation();
       } else if (this.isAboveGround()) {
-        walking_sound.pause();
-        this.setFalse();
-        this.jumpAnimation();
+        this.playJumpAnimation();
       } else if (!this.world.keyboard.LEFT && !this.world.keyboard.RIGHT && this.HP > 0 && !this.alreadyIdl) {
-        this.idlAnimation();
-        this.isMoving = false;
+        this.playIdlAnimation();
       } else if (this.lazy && !this.alreadyLazy) {
-        this.lazyAniamtion();
-        afk_sound.play();
+        this.playLazyAnimation
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-        this.setFalse();
-        this.isMoving = true;
-        this.playAnimation(this.walk_animation_Images);
-        walking_sound.play();
+        this.walking();
       }
+    }, 50);
+  }
+
+  playDeadAnimation() {
+    this.setFalse();
+    this.deadAnimation();
+  }
+
+  playHurtAnimation() {
+    this.setFalse();
+    this.playAnimation(this.hurt_Animation_Images);
+  }
+
+  playJumpAnimation() {
+    walking_sound.pause();
+    this.setFalse();
+    this.jumpAnimation();
+  }
+
+  playIdlAnimation() {
+    this.idlAnimation();
+    this.isMoving = false;
+  }
+
+  playLazyAnimation() {
+    this.lazyAniamtion();
+    afk_sound.play();
+  }
+
+  walking() {
+    this.setFalse();
+    this.isMoving = true;
+    this.playAnimation(this.walk_animation_Images);
+    walking_sound.play();
+  }
+
+  pauseWalkingSoundCheck() {
+    setInterval(() => {
       if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
         walking_sound.pause();
       }
-    }, 50);
+    }, );
   }
 
   deadAnimation() {
@@ -170,14 +194,8 @@ class Character extends MoveableObject {
     clearInterval(this.movementInt);
     clearInterval(this.jumpInt);
     this.deathAnimation();
-    setTimeout(() => {
-      stopGame();
-      this.showEndscreen();
-      this.playAgain();
-      gameOver_sound.play();
-    }, 1000);
+    this.endGame();
   }
-
 
   deathAnimation() {
     this.speedY = 20;
@@ -185,6 +203,15 @@ class Character extends MoveableObject {
       this.playAnimation(this.dead_animation);
       this.x -= 10;
     }, 142.85);
+  }
+
+  endGame() {
+    setTimeout(() => {
+      stopGame();
+      this.showEndscreen();
+      this.playAgain();
+      gameOver_sound.play();
+    }, 1000);
   }
 
   jumpAnimation() {
@@ -196,30 +223,34 @@ class Character extends MoveableObject {
         clearInterval(this.jumpInt);
         this.movement();
       }
-        this.playAnimation(this.jump_animation_Images);
-        if (this.currentImage >= this.jump_animation_Images.length) {
-            this.currentImage = this.jump_animation_Images.length - 1;
-            this.img = this.imageCache[this.jump_animation_Images[this.currentImage]];
-            if (this.y == 180) {
-                clearInterval(this.jumpInt);
-                this.idlAnimation();
-                this.movement();
-            }
-        }
+      this.stopJumpAnimationRepeate();
     }, 80);
+  }
+
+  stopJumpAnimationRepeate() {
+    this.playAnimation(this.jump_animation_Images);
+    if (this.currentImage >= this.jump_animation_Images.length) {
+      this.currentImage = this.jump_animation_Images.length - 1;
+      this.img = this.imageCache[this.jump_animation_Images[this.currentImage]];
+      if (this.y == 180) {
+        clearInterval(this.jumpInt);
+        this.idlAnimation();
+        this.movement();
+      }
+    }
   }
 
   idlAnimation() {
     this.alreadyIdl = true;
     clearInterval(this.lazyInt);
-    this.idlInt = setInterval(() => { 
+    this.idlInt = setInterval(() => {
       this.playAnimation(this.idl_animation);
     }, 140);
     if (!this.lazy) {
-        this.lazyTimeout = setTimeout(() => {
-          this.lazy = true;
-        }, 5000);
-      }
+      this.lazyTimeout = setTimeout(() => {
+        this.lazy = true;
+      }, 5000);
+    }
   }
 
   lazyAniamtion() {
@@ -241,16 +272,15 @@ class Character extends MoveableObject {
     afk_sound.currentTime = 0;
   }
 
-  
   showEndscreen() {
-    document.getElementById('endgameImg').src = 'img/9_intro_outro_screens/game_over/game over.png';
-    document.getElementById('endgameImg').classList.remove('d-none');
-    document.getElementById('mobileControlles').classList.add('d-none');
+    document.getElementById("endgameImg").src =
+      "img/9_intro_outro_screens/game_over/game over.png";
+    document.getElementById("endgameImg").classList.remove("d-none");
+    document.getElementById("mobileControlles").classList.add("d-none");
   }
 
-
   playAgain() {
-    document.getElementById('tryAgain').classList.remove('d-none');
-    document.getElementById('home').classList.remove('d-none');
+    document.getElementById("tryAgain").classList.remove("d-none");
+    document.getElementById("home").classList.remove("d-none");
   }
 }

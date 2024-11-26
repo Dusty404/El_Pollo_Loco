@@ -61,11 +61,9 @@ class ThrowableObject extends MoveableObject {
 
     bottleanimation() {
         setInterval(() => {
-        if (this.hit === true) {
+        if (this.hit == true) {
             this.splashanimation();
-        }},50);
-        setInterval(() => {
-        if (this.hit === false) {
+        } else if (this.hit == false) {
             this.spinanimation();
         }},50);
     }
