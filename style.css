@@ -1,3 +1,12 @@
+@font-face {
+    font-display: swap; 
+    font-family: 'Sancreek';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./font/sancreek-v25-latin-regular.woff2') format('woff2');
+}
+
+
 .d-none {
     display: none !important;
 }
@@ -15,6 +24,7 @@ body {
     background-position: bottom;
     margin: 0;
     height: 100vh;
+    font-family: 'Sancreek';
 }
 
 
@@ -89,6 +99,11 @@ canvas {
     max-height: 90%;
     height: 30px;
     width: 30px;
+}
+
+
+button {
+    font-family: 'Sancreek';
 }
 
 

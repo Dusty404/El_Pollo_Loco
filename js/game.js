@@ -19,6 +19,8 @@ function init() {
 function home() {
   gameOver_sound.pause();
   gameOver_sound.currentTime = 0;
+  win_game_sound.pause();
+  win_game_sound.currentTime = 0;
   document.getElementById("canvas").classList.add("d-none");
   document.getElementById("menuOverlay").classList.add("backgroundImage");
   document.getElementById("home").classList.add("d-none");
