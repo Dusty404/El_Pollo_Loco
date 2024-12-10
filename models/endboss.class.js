@@ -149,6 +149,7 @@ class Endboss extends MoveableObject {
             bgMusic.pause();
             bgMusic.currentTime = 0;
             win_game_sound.play();
+            pausesSound();
             this.winGame();
         }, 3000);
     }

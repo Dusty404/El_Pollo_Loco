@@ -104,6 +104,14 @@ canvas {
 
 button {
     font-family: 'Sancreek';
+    cursor: pointer;
+    border: solid 2px black;
+}
+
+
+button:hover {
+    color: white;
+    border: solid 2px white;
 }
 
 
@@ -284,6 +292,25 @@ button {
     bottom: 16px;
     left: 50%;
     transform: translate(-50%, 0);
+}
+
+
+a {
+    text-decoration: none;
+    color: black;
+    font-family: sans-serif;
+    font-size: 24px;
+}
+
+
+a:hover {
+    text-decoration: underline;
+    color: white;
+}
+
+
+.impressum {
+    padding-top: 16px;
 }
 
 

@@ -72,9 +72,13 @@ class World {
 
 
   playerPushBackByMapend() {
-    if (this.character.x > this.lvl.level_end_x) {
-      this.character.x - enemie.speedFactor - 1;
-    };
+    this.lvl.enemies.forEach((enemie) => {
+      if (enemie instanceof Endboss) {
+        if (this.character.x > this.lvl.level_end_x) {
+          this.character.x = this.character.x - enemie.speedFactor - 1;
+        };
+      }
+    });
   }
 
 

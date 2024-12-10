@@ -47,15 +47,25 @@ function muteMusic() {
     if (musicMute === false) {
         bgMusic.muted = true;
         win_game_sound.muted = true;
+        gameOver_sound.muted = true;
         musicMute = true;        
         document.getElementById('musicImg').src ='img/optionButtons/xmark-solid.svg';
     } else if (musicMute === true) {
         bgMusic.muted = false;
         win_game_sound.mute = false;
+        gameOver_sound.muted = false;
         musicMute = false;
         document.getElementById('musicImg').src ='img/optionButtons/music-solid.svg';
     }
 }
+
+
+function pausesSound() {
+    soundsArr.forEach(sound => {
+        sound.pause();
+    });
+}
+
 
 
 function handleSoundAndMusic() {

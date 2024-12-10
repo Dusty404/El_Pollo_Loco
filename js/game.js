@@ -4,8 +4,7 @@ let keyboard = new Keyboard();
 let fullscreen = false;
 
 function init() {
-  gameOver_sound.pause();
-  gameOver_sound.currentTime = 0;
+  resetSounds();
   startLvl();
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
@@ -13,6 +12,14 @@ function init() {
   showgame();
   document.getElementById("endgameImg").classList.add("d-none");
   document.getElementById("tryAgain").classList.add("d-none");
+}
+
+
+function resetSounds() {
+  gameOver_sound.pause();
+  gameOver_sound.currentTime = 0;
+  win_game_sound.pause();
+  win_game_sound.currentTime = 0;
 }
 
 
