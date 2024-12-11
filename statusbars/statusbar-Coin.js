@@ -1,4 +1,5 @@
 class StatusbarCoin extends Statusbar {
+    
     y = 50;
 
     images_Coin = [
@@ -12,7 +13,6 @@ class StatusbarCoin extends Statusbar {
 
     coins = 0;
 
-
     constructor() {
         super();
         this.percentage = 0
@@ -22,7 +22,11 @@ class StatusbarCoin extends Statusbar {
         this.setPercentage(0);
     };
 
-
+    /**
+    * Sets the percentage of the HP bar and updates the corresponding image.
+    * 
+    * @param {number} percentage - The percentage to set (0-100).
+    */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.images_Coin[this.resolveIndex()];

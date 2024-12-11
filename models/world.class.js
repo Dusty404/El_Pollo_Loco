@@ -1,4 +1,5 @@
 class World {
+  
   character = new Character();
   lvl = level1;
   ctx;
@@ -17,7 +18,6 @@ class World {
   enemiesToRemove = [];
   hitCD = false;
 
-
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
@@ -28,26 +28,35 @@ class World {
     this.playBackgroundMusic();
   }
 
-
+  /**
+  * Cheats function to increase the bottle count and character HP to very high values.
+  */
   cheats() {
     world.statusbarBottle.bottle_count = 2000000000000;
-    world.character.HP = 200000
+    world.character.HP = 200000;
   }
 
-
+  /**
+  * Plays the background music of the game.
+  */
   playBackgroundMusic() {
     this.backgroundMusic.play();
   }
 
-
+  /**
+  * Sets the world for the character.
+  */
   setWorld() {
     this.character.world = this;
   }
-  
+
+  /**
+  * Starts running the game, with intervals to check collisions and throw objects.
+  */
   run() {
     setInterval(() => {
       this.checkCollisonEnemie();
-    }, );
+    },);
     setInterval(() => {
       this.checkThrowObjects();
     }, 200);
@@ -56,10 +65,12 @@ class World {
       this.firstmeet();
       this.setBossRelativMapEnd();
       this.playerPushBackByMapend();
-    }, );
+    },);
   }
 
-
+  /**
+  * Sets the relative map end position based on the boss's position.
+  */
   setBossRelativMapEnd() {
     this.lvl.enemies.forEach((enemie) => {
       if (enemie instanceof Endboss) {
@@ -70,7 +81,9 @@ class World {
     });
   }
 
-
+  /**
+  * Pushes the player back when they reach the map's end near the boss.
+  */
   playerPushBackByMapend() {
     this.lvl.enemies.forEach((enemie) => {
       if (enemie instanceof Endboss) {
@@ -81,7 +94,9 @@ class World {
     });
   }
 
-
+  /**
+  * Handles the first meeting with the boss, showing the HP bar after a delay.
+  */
   firstmeet() {
     if (this.character.x === 4800 && !this.meet) {
       this.lvl.enemies.forEach((enemie) => {
@@ -90,31 +105,39 @@ class World {
           this.meet = true;
           setTimeout(() => {
             this.showHPBar = true;
-        }, 6000);  
+          }, 6000);
         }
       });
     }
   }
 
+  /**
+  * Checks for various collisions in the game.
+  */
   checkCollison() {
     this.checkCollisonCoin();
     this.checkCollisonBottle();
     this.checkCollisionTop();
   }
 
+  /**
+  * Checks for collisions with enemies.
+  */
   checkCollisonEnemie() {
     this.lvl.enemies.forEach((enemie) => {
       if (this.character.isColliding(enemie) && this.character.HP > 0 && enemie instanceof Endboss && !this.hitCD) {
         enemie.attack = true;
         this.gotHitByEnemie(enemie);
       } else if (this.character.isColliding(enemie) && this.character.HP > 0 && enemie.HP > 0 &&
-                !this.hitCD && !this.character.isCollidingTop(enemie)) {
+        !this.hitCD && !this.character.isCollidingTop(enemie)) {
         this.gotHitByEnemie();
       }
     });
   }
 
-
+  /**
+  * Handles the player getting hit by an enemy.
+  */
   gotHitByEnemie() {
     this.hitCD = true;
     this.character.hit();
@@ -125,7 +148,9 @@ class World {
     }, 600);
   }
 
-
+  /**
+  * Checks for collisions with enemies above.
+  */
   checkCollisionTop() {
     this.lvl.enemies.forEach((enemie) => {
       this.jumpOnEnemie(enemie);
@@ -134,7 +159,9 @@ class World {
     this.deleteEnemie();
   }
 
-
+  /**
+  * Handles jumping on an enemy, causing damage and the player's jump animation.
+  */
   jumpOnEnemie(enemie) {
     if (this.character.isCollidingTop(enemie) && this.character.HP > 0 && this.character.speedY < 0) {
       enemie.HP--;
@@ -144,7 +171,9 @@ class World {
     };
   }
 
-
+  /**
+  * Deletes chickens from the map when their HP reaches zero.
+  */
   deleteChickenFromMap(enemie) {
     if ((enemie instanceof Chicken || enemie instanceof ChickenSmall) && enemie.HP === 0 && !this.enemiesToRemove.includes(enemie)) {
       this.enemiesToRemove.push(enemie);
@@ -153,7 +182,9 @@ class World {
     };
   }
 
-
+  /**
+  * Deletes an enemy from the map with a delay based on its type.
+  */
   deleteEnemie() {
     this.enemiesToRemove.forEach((enemie) => {
       const delay = enemie instanceof Endboss ? 3000 : 200;
@@ -166,7 +197,9 @@ class World {
     });
   }
 
-
+  /**
+  * Checks for collisions between enemies and bottles.
+  */
   checkCollisonEnemieAndBottle() {
     this.lvl.enemies.forEach((enemie) => {
       this.handleBottleCollisionEnemie(enemie);
@@ -174,7 +207,9 @@ class World {
     this.deleteEnemie();
   }
 
-
+  /**
+  * Handles the collision of a bottle with an enemy.
+  */
   handleBottleCollisionEnemie(enemie) {
     for (let i = 0; i < this.throwableObject.length; i++) {
       const bottle = this.throwableObject[i];
@@ -190,7 +225,9 @@ class World {
     }
   }
 
-
+  /**
+  * Handles the collision of a bottle with an enemy (non-boss).
+  */
   bottleHitEnemie(i, enemie, bottle) {
     this.playDeathSound(enemie);
     this.chickenBottleHit(i, enemie, bottle);
@@ -198,25 +235,31 @@ class World {
     bottle_shatter_sound.play();
   }
 
-
+  /**
+  * Handles the collision of a bottle with the ground.
+  */
   bottleHitGround(i, bottle) {
     bottle.hit = true;
     bottle_shatter_sound.play();
     setTimeout(() => {
-    this.throwableObject.splice(i, 1);
+      this.throwableObject.splice(i, 1);
     }, 100);
   }
 
-
+  /**
+  * Deletes an enemy from the map when its HP reaches zero.
+  */
   deleteEnemieFromMap(enemie) {
     if (enemie.HP === 0 && !this.enemiesToRemove.includes(enemie)) {
-    this.enemiesToRemove.push(enemie);
-    clearInterval(enemie.walk);
-    clearInterval(enemie.walkanimation);
+      this.enemiesToRemove.push(enemie);
+      clearInterval(enemie.walk);
+      clearInterval(enemie.walkanimation);
     }
   }
 
-
+  /**
+  * Handles the interaction when a chicken is hit by a bottle.
+  */
   chickenBottleHit(i, enemie, bottle) {
     bottle.hit = true;
     if (enemie.HP > 0 && !enemie.gotHit) {
@@ -230,8 +273,10 @@ class World {
     }, 100);
   }
 
-
-  bossBottleHit(i, enemie ,bottle) {
+  /**
+  * Handles the interaction when a boss is hit by a bottle.
+  */
+  bossBottleHit(i, enemie, bottle) {
     bottle.hit = true;
     if (enemie.HP > 0 && !enemie.gotHit && enemie.x < 5100) {
       enemie.gotHit = true;
@@ -245,7 +290,9 @@ class World {
     this.deleteEnemieFromMap(enemie);
   }
 
-
+  /**
+  * Checks for collisions with coins.
+  */
   checkCollisonCoin() {
     const coinsToRemove = [];
     this.lvl.coins.forEach((coin, index) => {
@@ -261,6 +308,9 @@ class World {
     });
   }
 
+  /**
+  * Checks for collisions with bottles.
+  */
   checkCollisonBottle() {
     const bottlesToRemove = [];
     this.lvl.bottles.forEach((bottle, index) => {
@@ -276,6 +326,9 @@ class World {
     });
   }
 
+  /**
+  * Checks if the player is throwing objects (bottles).
+  */
   checkThrowObjects() {
     if (this.keyboard.D && this.statusbarBottle.bottle_count > 0) {
       let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 100);
@@ -288,7 +341,9 @@ class World {
     }
   }
 
-
+  /**
+  * Plays the death sound of the respective enemy.
+  */
   playDeathSound(enemie) {
     if (enemie instanceof Chicken) {
       chicken_death_sound.play();
@@ -297,7 +352,9 @@ class World {
     };
   }
 
-
+  /**
+  * Draws the game world, including background, status bars, character, and throwable objects.
+  */
   draw() {
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
     this.drawWorld();
@@ -309,7 +366,9 @@ class World {
     });
   }
 
-
+  /**
+  * Draws the world, including background objects, clouds, enemies, coins, and bottles.
+  */
   drawWorld() {
     this.ctx.translate(this.camera_x, 0);
     this.addArrayObjectToMap(this.lvl.backgroundObjects);
@@ -320,18 +379,22 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
   }
 
-
+  /**
+  * Draws the status bars (HP, coins, bottle count).
+  */
   drawStatusBars() {
     this.addToMap(this.statusbar);
     this.addToMap(this.statusbarCoins);
     this.addToMap(this.statusbarBottle);
     this.addToMap(this.statusbarBottle);
-    if(this.showHPBar) {
+    if (this.showHPBar) {
       this.addToMap(this.statusbarBossHP);
     }
   }
 
-
+  /**
+  * Draws the character and all throwable objects (bottles).
+  */
   drawCharacterAndBottles() {
     this.ctx.translate(this.camera_x, 0);
     this.addToMap(this.character);
@@ -339,28 +402,31 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
   }
 
-
+  /**
+  * Adds an array of objects to the map.
+  */
   addArrayObjectToMap(ao) {
     ao.forEach((object) => {
       this.addToMap(object);
     });
   }
 
-  
+  /**
+  * Adds an object to the map, handling its direction (flipping if necessary).
+  */
   addToMap(object) {
     if (object.otherDirection) {
       this.flipImage(object);
     }
-
     object.draw(this.ctx);
-
-
     if (object.otherDirection) {
       this.flipImageBack(object);
     }
   }
 
-
+  /**
+  * Flips the image of an object horizontally.
+  */
   flipImage(object) {
     this.ctx.save();
     this.ctx.translate(object.width, 0);
@@ -368,14 +434,19 @@ class World {
     object.x = object.x * -1;
   }
 
-
+  /**
+  * Restores the image's original direction.
+  */
   flipImageBack(object) {
     object.x = object.x * -1;
     this.ctx.restore();
   }
 
-
+  /**
+  * Displays the "Try Again" screen when the player fails.
+  */
   playAgain() {
     document.getElementById('tryAgain').classList.remove('d-none');
   }
+
 }

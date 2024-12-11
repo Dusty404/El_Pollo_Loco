@@ -26,6 +26,9 @@ Small_chicken_death_sound.volume = 0.4;
 bottle_shatter_sound.volume = 0.2;
 bottle_collect_sound.volume = 0.5;
 
+/**
+ * Toggles muting/unmuting of all sound effects.
+ */
 function muteSounds() {
     if (soundMute === false) {
         soundsArr.forEach(sound => {
@@ -42,7 +45,9 @@ function muteSounds() {
     }
 }
 
-
+/**
+ * Toggles muting/unmuting of all music tracks.
+ */
 function muteMusic() {
     if (musicMute === false) {
         bgMusic.muted = true;
@@ -52,26 +57,29 @@ function muteMusic() {
         document.getElementById('musicImg').src ='img/optionButtons/xmark-solid.svg';
     } else if (musicMute === true) {
         bgMusic.muted = false;
-        win_game_sound.mute = false;
+        win_game_sound.muted = false;
         gameOver_sound.muted = false;
         musicMute = false;
         document.getElementById('musicImg').src ='img/optionButtons/music-solid.svg';
     }
 }
 
-
+/**
+ * Pauses all sound effects currently being played.
+ */
 function pausesSound() {
     soundsArr.forEach(sound => {
         sound.pause();
     });
 }
 
-
-
+/**
+ * Stops all sound effects and music, resetting the background music.
+ */
 function handleSoundAndMusic() {
     soundsArr.forEach(sound => {
-      sound.pause();
+        sound.pause();
     });
     bgMusic.pause();
     bgMusic.currentTime = 0;
-  }
+}

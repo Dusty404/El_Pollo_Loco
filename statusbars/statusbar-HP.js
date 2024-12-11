@@ -11,7 +11,6 @@ class StatusbarHP extends Statusbar {
         'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png',
     ];
 
-
     constructor() {
         super();
         this.percentage = 100;
@@ -21,7 +20,11 @@ class StatusbarHP extends Statusbar {
         this.setPercentage(100);
     };
 
-
+    /**
+    * Sets the percentage of the HP bar and updates the corresponding image.
+    * 
+    * @param {number} percentage - The percentage to set (0-100).
+    */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.images_HP[this.resolveIndex()];

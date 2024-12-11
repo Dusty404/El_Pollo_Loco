@@ -22,7 +22,9 @@ class Coin extends DrawableObject {
         this.height = 150;
     }
 
-
+    /**
+     * Plays the Coin rotate animation
+     */
     coinAnimation() {
         setInterval(() => {
             this.playAnimation(this.coinImages);

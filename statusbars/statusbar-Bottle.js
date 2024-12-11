@@ -1,4 +1,5 @@
 class StatusbarBottle extends Statusbar {
+    
     y = 100;
 
     images_Bottle = [
@@ -12,7 +13,6 @@ class StatusbarBottle extends Statusbar {
 
     bottle_count = 0;
 
-
     constructor() {
         super();
         this.percentage = 0;
@@ -22,7 +22,11 @@ class StatusbarBottle extends Statusbar {
         this.setPercentage(0);
     };
 
-
+    /**
+    * Sets the percentage of the HP bar and updates the corresponding image.
+    * 
+    * @param {number} percentage - The percentage to set (0-100).
+    */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.images_Bottle[this.resolveIndex()];

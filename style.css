@@ -284,6 +284,11 @@ button:hover {
 }
 
 
+.rotateDeviceContainer h1 {
+    text-align: center;
+}
+
+
 .playGameButtons {
     display: flex;
     align-items: center;
@@ -310,13 +315,59 @@ a:hover {
 
 
 .impressum {
-    padding-top: 16px;
+    background-color: #FF9B00;
+    border: solid 2px black;
+    font-family: sans-serif;
+    z-index: 998;
+    max-height: 476px;
+    height: 100%;
+    overflow: overlay;
+    padding: 0 8px;
 }
 
 
-@media only screen and (max-width: 935px) {
+::-webkit-scrollbar {
+    width: 8px;
+}
+  
+
+::-webkit-scrollbar-track {
+    background: #FF9B00;
+    border-radius: 8px;
+}
+
+
+::-webkit-scrollbar-thumb {
+    background: black;
+    border-radius: 8px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3f3e3e;
+}
+
+
+.impressum img {
+    height: 24px;
+    width: 24px;
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    cursor: pointer;
+}
+
+
+@media only screen and (max-width: 1024px) {
     .mobileControlles {
         display: flex;
+    }
+}
+
+
+@media only screen and (max-width: 830px) {
+    .fullscreenButton {
+        display: none;
     }
 }
 

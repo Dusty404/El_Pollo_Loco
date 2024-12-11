@@ -22,7 +22,6 @@ class Endboss extends MoveableObject {
     bossalerte;
     bossAnimationStart = false;
 
-
     offset = {
         top: 70,
         bottom: 90,
@@ -97,12 +96,19 @@ class Endboss extends MoveableObject {
         this.checkFirstMeet();
     }
 
-
+    /**
+    * Stops the game by clearing all intervals.
+    * This method iterates over a range of interval IDs and clears each using `window.clearInterval()`.
+    */
     stopGame() {
         for (let i = 1; i < 9999; i++) window.clearInterval(i);
     }
 
-
+    /**
+     * Starts the animation for the boss, including movement, attack, and hit registration.
+     * This method checks if the boss's HP is greater than 0 and, if so, initiates intervals for walking speed, 
+     * hit registration, and attack checks.
+     */
     animate() {
         this.bossWalk();
         if (this.HP > 0) {
@@ -111,13 +117,18 @@ class Endboss extends MoveableObject {
             }, 25);
             this.hitregInterval = setInterval(() => {
                 this.bossHP();
-            }, );
+            },);
             this.checkAttack = setInterval(() => {
                 this.attackCheck();
-            }, );
+            },);
         }
     }
 
+    /**
+     * Handles the boss's health when it gets hit.
+     * This method clears the hit registration interval and walking animation, 
+     * plays the hurt animation, and re-starts the walking animation after a delay.
+     */
     bossHP() {
         if (this.gotHit == true) {
             clearInterval(this.hitregInterval);
@@ -131,6 +142,10 @@ class Endboss extends MoveableObject {
         }
     }
 
+    /**
+     * Checks if the boss is dead, and if so, stops the walking and attack intervals, 
+     * plays the death animation, and shows the win screen.
+     */
     checkdeath() {
         this.Deathcheckint = setInterval(() => {
             if (this.HP == 0) {
@@ -143,6 +158,10 @@ class Endboss extends MoveableObject {
         }, 10);
     }
 
+    /**
+     * Shows the win screen after the boss's death.
+     * Stops the game, pauses background music, plays a win sound, and triggers the win game screen.
+     */
     showWinScreen() {
         setTimeout(() => {
             stopGame();
@@ -154,7 +173,10 @@ class Endboss extends MoveableObject {
         }, 3000);
     }
 
-
+    /**
+     * Plays the boss death animation after checking if the boss is dead.
+     * This method stops other animations, plays the death sound, and starts the death animation.
+     */
     deathAnimation() {
         if (this.BossIsDead) {
             this.stopAnimationInterval();
@@ -168,7 +190,10 @@ class Endboss extends MoveableObject {
         }
     }
 
-
+    /**
+     * Stops all animation intervals (walking, hurting, attacking, death animations).
+     * This method clears all intervals related to boss animation to ensure no other actions occur.
+     */
     stopAnimationInterval() {
         clearInterval(this.walk);
         clearInterval(this.hurt);
@@ -176,16 +201,22 @@ class Endboss extends MoveableObject {
         clearInterval(this.bossDeath);
     }
 
-
-    playBossDeathAnimation() {        
+    /**
+     * Plays the boss's death animation after the death sequence.
+     * This method stops the previous death animation and starts the final death animation.
+     */
+    playBossDeathAnimation() {
         clearInterval(this.bossDeath);
         this.bossDeath = setInterval(() => {
             this.loadImage(this.dead_animation_Images[0]);
             this.playAnimation(this.dead_animation_Images);
-        }, 200);        
+        }, 200);
     }
 
-
+    /**
+     * Handles the boss's attack animation.
+     * If the boss is alive and not already hurt, the attack animation is played and the boss starts walking again after a delay.
+     */
     bossAttack() {
         if (this.HP > 0 && !this.gotHit) {
             clearInterval(this.walk);
@@ -198,6 +229,10 @@ class Endboss extends MoveableObject {
         }
     }
 
+    /**
+     * Starts the boss walking again after completing the attack animation.
+     * This method waits for the attack animation to finish, then resumes the boss's walking animation.
+     */
     startWalkAgain() {
         setTimeout(() => {
             clearInterval(this.attackInt);
@@ -206,6 +241,10 @@ class Endboss extends MoveableObject {
         }, 2000);
     }
 
+    /**
+     * Starts the walking animation for the boss.
+     * This method checks if the boss is alive and then starts the walking animation.
+     */
     bossWalk() {
         if (this.HP > 0) {
             clearInterval(this.walk);
@@ -215,11 +254,16 @@ class Endboss extends MoveableObject {
         }
     }
 
+    /**
+     * Handles the boss's hurt state.
+     * If the boss is hit, it stops the walking animation, increases the speed factor, 
+     * and plays the hurt animation, resetting the hit registration after a delay.
+     */
     bossHurt() {
         if (this.HP > 0) {
             clearInterval(this.walkSpeed);
             clearInterval(this.hurt);
-            this.speedFactor++
+            this.speedFactor++;
             this.hurt = setInterval(() => {
                 this.playAnimation(this.hurt_animation_Images);
             }, 100);
@@ -227,14 +271,20 @@ class Endboss extends MoveableObject {
         }
     }
 
-
+    /**
+     * Resets the hit registration after a delay.
+     * This method sets the `gotHit` flag back to false after a short timeout.
+     */
     resetHitRegestration() {
         setTimeout(() => {
             this.gotHit = false;
         }, 2000);
     }
 
-
+    /**
+     * Checks if the boss is allowed to attack.
+     * If the boss is ready to attack and there's no ongoing cooldown, it triggers the attack animation.
+     */
     attackCheck() {
         if (this.attack === true && !this.attackCooldown) {
             clearInterval(this.walk);
@@ -244,12 +294,20 @@ class Endboss extends MoveableObject {
         }
     }
 
+    /**
+     * Resets the attack cooldown.
+     * This method waits for a period of time before allowing the boss to attack again.
+     */
     resetAttackColldown() {
         setTimeout(() => {
             this.attackCooldown = false;
         }, 2000);
     }
 
+    /**
+     * Checks if the boss has met the player for the first time.
+     * If the boss has met the player, it triggers the first meeting animation.
+     */
     checkFirstMeet() {
         this.checkFirstMeetInt = setInterval(() => {
             if (this.meet) {
@@ -259,10 +317,14 @@ class Endboss extends MoveableObject {
         }, 10);
     }
 
+    /**
+     * Plays the animation when the boss first meets the player.
+     * This method makes the boss walk towards the player before playing the encounter animation.
+     */
     firstMeetAnimation() {
         this.bossWalk();
         this.firstMeetAnimationInt = setInterval(() => {
-            if(this.x > 5100 && !this.bossAnimationStart) {
+            if (this.x > 5100 && !this.bossAnimationStart) {
                 this.speedFactor = 1;
                 this.x -= this.speedFactor;
             } else {
@@ -271,7 +333,10 @@ class Endboss extends MoveableObject {
         }, 10);
     }
 
-
+    /**
+     * Plays the meeting animation when the boss first sees the player.
+     * This method stops the walking animation and starts the boss alert animation, followed by walking again.
+     */
     playMeetAnimation() {
         this.speedFactor = 0;
         clearInterval(this.walk);
@@ -281,16 +346,22 @@ class Endboss extends MoveableObject {
         this.startBossWalk();
     }
 
-
+    /**
+     * Starts the boss's walk animation after the alert animation.
+     * This method waits for the alert animation to finish before allowing the boss to walk towards the player.
+     */
     startBossWalk() {
         setTimeout(() => {
             clearInterval(this.bossalerte);
             this.speedFactor = 2;
             this.animate();
-        }, 2800); 
+        }, 2800);
     }
 
-
+    /**
+     * Plays the boss alert animation.
+     * This method triggers the alert animation and plays it at regular intervals.
+     */
     bossAlert() {
         this.loadImage(this.alert_animation_Images[0]);
         this.bossalerte = setInterval(() => {
@@ -298,12 +369,15 @@ class Endboss extends MoveableObject {
         }, 600);
     }
 
-
+    /**
+     * Displays the win screen after the game is won.
+     * This method shows the win screen and gives options to return to the home page or retry the game.
+     */
     winGame() {
         document.getElementById('endgameImg').src = 'img/9_intro_outro_screens/win/won_2.png';
         document.getElementById('endgameImg').classList.remove('d-none');
         document.getElementById('mobileControlles').classList.add('d-none');
         document.getElementById('home').classList.remove('d-none');
+        document.getElementById('tryAgain').classList.remove('d-none');
     }
-
 }

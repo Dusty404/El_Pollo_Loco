@@ -12,7 +12,6 @@ class StatusbarBossHP extends Statusbar {
         'img/7_statusbars/2_statusbar_endboss/blue/blue100.png',
     ];
 
-
     constructor() {
         super();
         this.percentage = 100;
@@ -22,10 +21,14 @@ class StatusbarBossHP extends Statusbar {
         this.setPercentage(100);
     };
 
-
+    /**
+    * Sets the percentage of the HP bar and updates the corresponding image.
+    * 
+    * @param {number} percentage - The percentage to set (0-100).
+    */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.images_BossHP[this.resolveIndex()];
         this.img = this.imageCache[path];
-    };
+    }
 }

@@ -29,6 +29,7 @@ class Character extends MoveableObject {
     "img/2_character_pepe/2_walk/W-25.png",
     "img/2_character_pepe/2_walk/W-26.png",
   ];
+
   idl_animation = [
     "img/2_character_pepe/1_idle/idle/I-1.png",
     "img/2_character_pepe/1_idle/idle/I-2.png",
@@ -41,6 +42,7 @@ class Character extends MoveableObject {
     "img/2_character_pepe/1_idle/idle/I-9.png",
     "img/2_character_pepe/1_idle/idle/I-10.png",
   ];
+
   jump_animation_Images = [
     "img/2_character_pepe/3_jump/J-32.png",
     "img/2_character_pepe/3_jump/J-33.png",
@@ -50,6 +52,7 @@ class Character extends MoveableObject {
     "img/2_character_pepe/3_jump/J-36.png",
     "img/2_character_pepe/3_jump/J-37.png",
   ];
+
   dead_animation = [
     "img/2_character_pepe/5_dead/D-51.png",
     "img/2_character_pepe/5_dead/D-52.png",
@@ -59,11 +62,13 @@ class Character extends MoveableObject {
     "img/2_character_pepe/5_dead/D-56.png",
     "img/2_character_pepe/5_dead/D-57.png",
   ];
+
   hurt_Animation_Images = [
     "img/2_character_pepe/4_hurt/H-41.png",
     "img/2_character_pepe/4_hurt/H-42.png",
     "img/2_character_pepe/4_hurt/H-43.png",
   ];
+
   lazy_animation_Images = [
     "img/2_character_pepe/1_idle/long_idle/I-11.png",
     "img/2_character_pepe/1_idle/long_idle/I-12.png",
@@ -76,6 +81,7 @@ class Character extends MoveableObject {
     "img/2_character_pepe/1_idle/long_idle/I-19.png",
     "img/2_character_pepe/1_idle/long_idle/I-20.png",
   ];
+  
   world;
 
   constructor() {
@@ -90,10 +96,17 @@ class Character extends MoveableObject {
     this.applyGravity();
   }
 
+  /**
+   * Stops all running intervals in the game.
+   */
   stopGame() {
     for (let i = 1; i < 9999; i++) window.clearInterval(i);
   }
 
+  /**
+  * Initializes character animations, such as movement and jumping.
+  * Sets up a game loop to handle camera movement and animations.
+  */
   animation() {
     setInterval(() => {
       this.world.camera_x = -this.x + 100;
@@ -102,9 +115,12 @@ class Character extends MoveableObject {
       this.animateJump();
     }, 1000 / 60);
     this.movement();
-    this.pauseWalkingSoundCheck()
+    this.pauseWalkingSoundCheck();
   }
 
+  /**
+  * Animates the character moving to the right, if conditions are met.
+  */
   animateGoRight() {
     if (
       this.world.keyboard.RIGHT &&
@@ -115,6 +131,9 @@ class Character extends MoveableObject {
     }
   }
 
+  /**
+  * Animates the character moving to the left, if conditions are met.
+  */
   animateGoLeft() {
     if (this.world.keyboard.LEFT && this.x > 0 && this.HP > 0) {
       this.moveLeft();
@@ -122,6 +141,10 @@ class Character extends MoveableObject {
     }
   }
 
+  /**
+  * Animates the character jumping, if conditions are met.
+  * Plays the jump sound effect.
+  */
   animateJump() {
     if (this.world.keyboard.SPACE && !this.isAboveGround() && this.HP > 0) {
       walking_sound.pause();
@@ -130,6 +153,9 @@ class Character extends MoveableObject {
     }
   }
 
+  /**
+  * Handles the character's movement and animations based on its state.
+  */
   movement() {
     this.movementInt = setInterval(() => {
       if (this.isDead()) {
@@ -141,39 +167,59 @@ class Character extends MoveableObject {
       } else if (!this.world.keyboard.LEFT && !this.world.keyboard.RIGHT && this.HP > 0 && !this.alreadyIdl) {
         this.playIdlAnimation();
       } else if (this.lazy && !this.alreadyLazy) {
-        this.playLazyAnimation
+        this.playLazyAnimation();
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.walking();
       }
     }, 50);
   }
 
+  /**
+  * Plays the character's death animation and transitions to the game over state.
+  */
   playDeadAnimation() {
     this.setFalse();
     this.deadAnimation();
   }
 
+  /**
+  * Plays the hurt animation when the character is injured.
+  */
   playHurtAnimation() {
     this.setFalse();
     this.playAnimation(this.hurt_Animation_Images);
   }
 
+  /**
+  * Plays the jump animation when the character is in the air.
+  * Pauses the walking sound.
+  */
   playJumpAnimation() {
     walking_sound.pause();
     this.setFalse();
     this.jumpAnimation();
   }
 
+  /**
+  * Plays the idle animation when the character is not moving.
+  */
   playIdlAnimation() {
     this.idlAnimation();
     this.isMoving = false;
   }
 
+  /**
+  * Plays the lazy animation when the character has been idle for too long.
+  * Plays the AFK sound effect.
+  */
   playLazyAnimation() {
     this.lazyAniamtion();
     afk_sound.play();
   }
 
+  /**
+  * Handles the walking animation and sound effect when the character is moving.
+  */
   walking() {
     this.setFalse();
     this.isMoving = true;
@@ -181,14 +227,20 @@ class Character extends MoveableObject {
     walking_sound.play();
   }
 
+  /**
+  * Pauses the walking sound effect when the character is not moving.
+  */
   pauseWalkingSoundCheck() {
     setInterval(() => {
       if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT) {
         walking_sound.pause();
       }
-    }, );
+    },);
   }
 
+  /**
+  * Handles the death sequence, including animations, sound, and game over screen.
+  */
   deadAnimation() {
     handleSoundAndMusic();
     clearInterval(this.movementInt);
@@ -197,6 +249,10 @@ class Character extends MoveableObject {
     this.endGame();
   }
 
+  /**
+  * Plays the death animation sequence.
+  * Decreases the character's position on the X-axis.
+  */
   deathAnimation() {
     this.speedY = 20;
     this.dead = setInterval(() => {
@@ -205,6 +261,9 @@ class Character extends MoveableObject {
     }, 142.85);
   }
 
+  /**
+  * Ends the game after the death sequence is complete.
+  */
   endGame() {
     setTimeout(() => {
       stopGame();
@@ -214,6 +273,9 @@ class Character extends MoveableObject {
     }, 1000);
   }
 
+  /**
+  * Handles the jump animation loop, transitioning back to idle after landing.
+  */
   jumpAnimation() {
     clearInterval(this.movementInt);
     clearInterval(this.jumpInt);
@@ -227,6 +289,9 @@ class Character extends MoveableObject {
     }, 80);
   }
 
+  /**
+  * Ensures the jump animation stops repeating once the character lands.
+  */
   stopJumpAnimationRepeate() {
     this.playAnimation(this.jump_animation_Images);
     if (this.currentImage >= this.jump_animation_Images.length) {
@@ -240,6 +305,10 @@ class Character extends MoveableObject {
     }
   }
 
+  /**
+  * Plays the idle animation when the character is not interacting.
+  * Sets up a timeout for transitioning to the lazy state.
+  */
   idlAnimation() {
     this.alreadyIdl = true;
     clearInterval(this.lazyInt);
@@ -253,6 +322,9 @@ class Character extends MoveableObject {
     }
   }
 
+  /**
+  * Plays the lazy animation when the character has been idle for an extended period.
+  */
   lazyAniamtion() {
     clearInterval(this.idlInt);
     this.alreadyLazy = true;
@@ -261,6 +333,10 @@ class Character extends MoveableObject {
     }, 140);
   }
 
+  /**
+  * Resets animation-related flags and clears all relevant intervals and timeouts.
+  * Stops the AFK sound effect.
+  */
   setFalse() {
     this.alreadyIdl = false;
     this.alreadyLazy = false;
@@ -272,6 +348,9 @@ class Character extends MoveableObject {
     afk_sound.currentTime = 0;
   }
 
+  /**
+  * Displays the game over screen and hides unnecessary UI elements.
+  */
   showEndscreen() {
     document.getElementById("endgameImg").src =
       "img/9_intro_outro_screens/game_over/game over.png";
@@ -279,6 +358,9 @@ class Character extends MoveableObject {
     document.getElementById("mobileControlles").classList.add("d-none");
   }
 
+  /**
+  * Displays options for restarting the game or returning to the home screen.
+  */
   playAgain() {
     document.getElementById("tryAgain").classList.remove("d-none");
     document.getElementById("home").classList.remove("d-none");
