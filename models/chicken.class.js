@@ -103,7 +103,7 @@ class Chicken extends MoveableObject {
     chickenJump() {
         setInterval(() => {
             let jumpInt = setInterval(() => {
-                this.speedY = 20; // Sets upward speed for the jump.
+                this.speedY = 20;
                 clearInterval(jumpInt);
             }, this.randomTime);
         }, 2000);

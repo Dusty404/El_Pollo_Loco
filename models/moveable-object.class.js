@@ -125,9 +125,9 @@ class MoveableObject extends DrawableObject {
         const objectTop = object.y + object.offset.top;
         const playerBottom = this.y + this.height - this.offset.bottom;
         return (this.x + this.width - this.offset.right) > (object.x + object.offset.left) &&
-            playerBottom > objectTop && // Unterkante des Spielers ist unter der Oberkante des Objekts
+            playerBottom > objectTop &&
             (this.x + this.offset.left) < (object.x + object.width - object.offset.right) &&
-            playerBottom <= objectTop + 20; // Optionaler Schwellenwert für eine bessere Kollision
+            playerBottom <= objectTop + 20;
     }
 
     /**
