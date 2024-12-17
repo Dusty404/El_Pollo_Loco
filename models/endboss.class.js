@@ -17,7 +17,7 @@ class Endboss extends MoveableObject {
     gotHit = false;
     attackInt;
     meet = false;
-    speedFactor = 2;
+    speedFactor;
     firstMeetAnimationInt;
     bossalerte;
     bossAnimationStart = false;
@@ -136,7 +136,6 @@ class Endboss extends MoveableObject {
             this.bossHurt();
             setTimeout(() => {
                 clearInterval(this.hurt);
-                this.bossWalk();
                 this.animate();
             }, 2000);
         }
@@ -150,6 +149,7 @@ class Endboss extends MoveableObject {
         this.Deathcheckint = setInterval(() => {
             if (this.HP == 0) {
                 clearInterval(this.walkSpeed);
+                this.speedFactor = 0;
                 this.BossIsDead = true;
                 this.deathAnimation();
                 clearInterval(this.Deathcheckint);
@@ -261,9 +261,10 @@ class Endboss extends MoveableObject {
      */
     bossHurt() {
         if (this.HP > 0) {
-            clearInterval(this.walkSpeed);
             clearInterval(this.hurt);
-            this.speedFactor++;
+            if (this.HP <= 2) {
+                this.speedFactor = 2.6;
+            }
             this.hurt = setInterval(() => {
                 this.playAnimation(this.hurt_animation_Images);
             }, 100);

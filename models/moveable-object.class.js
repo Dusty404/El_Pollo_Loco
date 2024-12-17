@@ -25,8 +25,11 @@ class MoveableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.accelration;
-                if (this instanceof Character && this.y > 180 && world.character.HP > 0) {
+                if (this.y > 180 && world.character.HP > 0 && this instanceof Character) {
                     this.y = 180;
+                    this.speedY = 0;
+                } else if (this.y > 345 && this instanceof Chicken) {
+                    this.y = 345;
                     this.speedY = 0;
                 }
             };
@@ -42,8 +45,10 @@ class MoveableObject extends DrawableObject {
     isAboveGround() {
         if (this instanceof ThrowableObject || world.character.HP == 0) {
             return true;
-        } else {
+        } else if (this instanceof Character) {
             return this.y < 180;
+        } else if (this instanceof Chicken) {
+            return this.y < 345;
         }
     }
 
@@ -122,7 +127,7 @@ class MoveableObject extends DrawableObject {
         return (this.x + this.width - this.offset.right) > (object.x + object.offset.left) &&
             playerBottom > objectTop && // Unterkante des Spielers ist unter der Oberkante des Objekts
             (this.x + this.offset.left) < (object.x + object.width - object.offset.right) &&
-            playerBottom <= objectTop + 10; // Optionaler Schwellenwert für eine bessere Kollision
+            playerBottom <= objectTop + 20; // Optionaler Schwellenwert für eine bessere Kollision
     }
 
     /**

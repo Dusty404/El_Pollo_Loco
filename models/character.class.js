@@ -268,7 +268,7 @@ class Character extends MoveableObject {
     setTimeout(() => {
       stopGame();
       this.showEndscreen();
-      this.playAgain();
+      playAgain();
       gameOver_sound.play();
     }, 1000);
   }
@@ -356,13 +356,5 @@ class Character extends MoveableObject {
       "img/9_intro_outro_screens/game_over/game over.png";
     document.getElementById("endgameImg").classList.remove("d-none");
     document.getElementById("mobileControlles").classList.add("d-none");
-  }
-
-  /**
-  * Displays options for restarting the game or returning to the home screen.
-  */
-  playAgain() {
-    document.getElementById("tryAgain").classList.remove("d-none");
-    document.getElementById("home").classList.remove("d-none");
   }
 }

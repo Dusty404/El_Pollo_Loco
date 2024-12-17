@@ -3,8 +3,10 @@ class Chicken extends MoveableObject {
     y = 345;
     height = 80;
     speed = 0.15 + Math.random() * 1;
+    randomTime;
     HP = 1;
     walkanimation;
+    jumpTimer = this.randomTime + 2000;
 
     offset = {
         top: 0,
@@ -35,6 +37,9 @@ class Chicken extends MoveableObject {
         this.animation();
         this.checkdeath();
         this.setChickenPosition();
+        this.applyGravity();
+        this.chickenJump();
+        this.setTimer();
     }
 
     /**
@@ -81,4 +86,26 @@ class Chicken extends MoveableObject {
         return 400 + Math.random() * 4800;
     }
 
+    /**
+     * Sets a random time interval for the chicken's jump.
+     * The random time is generated between 0 and 4000 milliseconds.
+     * 
+     */
+    setTimer() {
+        this.randomTime = Math.random() * 4000;
+    }
+
+    /**
+     * Initiates a periodic jump action for the chicken.
+     * The chicken jumps at a random time interval and repeats every 2000 milliseconds.
+     * 
+     */
+    chickenJump() {
+        setInterval(() => {
+            let jumpInt = setInterval(() => {
+                this.speedY = 20; // Sets upward speed for the jump.
+                clearInterval(jumpInt);
+            }, this.randomTime);
+        }, 2000);
+    }
 }
